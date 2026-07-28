@@ -2,7 +2,7 @@
 using namespace std;
 using ll = long long;
 using ld = double;
-
+//高斯消元法求解方程组
 //逆元的线性递归
 ll inv[3000001];
 void initial_inv(ll n, ll p) {
