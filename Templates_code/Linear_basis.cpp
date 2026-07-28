@@ -5,8 +5,125 @@ using std::swap;
 using std::fill;
 using std::max;
 using std::vector;
-using std::cin, std::cout;
+using std::cin;
+using std::cout;
 //基：可以表示原空间所有元素的一组极小线性无关组(不唯一)
+
+class Basis_AND_Tree {
+private:
+    const static int MAXN = 5e4;
+    const static int MAXM = 1e5;
+    const static int bit = 61;
+
+    int idx = 0;
+    int head[MAXN + 1] = {};
+    int next[2 * MAXM + 1];
+    int to[2 * MAXM + 1];
+    ll weight[2 * MAXM + 1];
+    ll path[MAXN + 1];
+    int vis[MAXN + 1] = {};
+    ll basis[bit + 1] = {};
+
+    void insert(ll val) {
+        for (int i = bit;i >= 0;i--) {
+            if ((val >> i) & 1) {
+                if (basis[i] == 0) {
+                    basis[i] = val;
+                    return;
+                }
+                val ^= basis[i];
+            }
+        }
+    }
+
+    void add_edge(int u, int v, ll w) {
+        next[++idx] = head[u];
+        head[u] = idx;
+        to[idx] = v;
+        weight[idx] = w;
+    }
+
+    int stasiz = 0;
+    ll ufe[2 * MAXM + 1][4];
+    int u, f, e;
+    ll w;
+
+    void push(int u, int f, int e, ll w) {
+        ++stasiz;
+        ufe[stasiz][0] = u;
+        ufe[stasiz][1] = f;
+        ufe[stasiz][2] = e;
+        ufe[stasiz][3] = w;
+
+    }
+
+    void pop() {
+        u = ufe[stasiz][0];
+        f = ufe[stasiz][1];
+        e = ufe[stasiz][2];
+        w = ufe[stasiz][3];
+        stasiz--;
+    }
+
+    void dfs(int root) {
+        stasiz = 1;
+        push(root, 0, -1, 0);
+        while (stasiz > 0) {
+            pop();
+            if (e == -1) {
+                //首次抵达
+                path[u] = w;
+                vis[u] = 1;
+                e = head[u];
+            }
+            else {
+                //下条边
+                e = next[e];
+            }
+            if (e != 0) {
+                //有效边
+                push(u, f, e, w);
+                int v = to[e];
+                //获取路径异或和
+                ll Xor = w ^ weight[e];
+                if (vis[v]) {
+                    //此处环判断,同步解决了回退父节点问题
+                    //环,不入栈(入递归)
+                    //插入线性基
+                    insert(Xor ^ path[v]);
+                }
+                else {
+                    //非环,入栈
+                    push(v, u, -1, Xor);
+                }
+            }
+        }
+    }
+
+    ll query(ll val) {
+        for (int i = bit;i >= 0;i--) {
+            val = max(val, val ^ basis[i]);
+        }
+        return val;
+    }
+
+public:
+    void solve() {
+        int n, m;
+        cin >> n >> m;
+        for (int i = 1;i <= m;i++) {
+            int u, v;
+            ll w;
+            cin >> u >> v >> w;
+            add_edge(u, v, w);
+            add_edge(v, u, w);
+        }
+        dfs(1);
+        cout << query(path[n]) << '\n';
+    }
+
+};
+
 
 class SSS {
     //例题：https://www.luogu.com.cn/problem/P3292
