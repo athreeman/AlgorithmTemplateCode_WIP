@@ -1,0 +1,420 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const ll mod = 1e9 + 7;
+
+//最大公约数
+//辗转相除法
+//gcd(a,b)=gcd(b,a%b)
+ll gcd(ll a, ll b) {
+    while (b) {
+        ll tmp = a;
+        a = b;
+        b = tmp % b;
+    }
+    return a;
+}
+
+//最小公倍数
+ll lcm(ll a, ll b) {
+    if (a == 0 || b == 0) {
+        return 0;
+    }
+    return a / gcd(a, b) * b;
+}
+
+//乘法快速幂
+ll pw(ll a, ll b) {
+    ll res = 1;
+    while (b) {
+        if (b & 1)res = res * a % mod;
+        a = a * a % mod;
+        b >>= 1;
+    }
+    return res;
+}
+
+//费马小定理,求逆元
+ll inv_(ll a, ll p) {
+    return pw(a, p - 2);
+}
+
+//逆元的线性递归
+//例题：https://www.luogu.com.cn/problem/P3811
+ll inv[3000001];
+void initial_inv(ll n, ll p) {
+    inv[1] = 1;
+    for (ll i = 2;i <= n;i++) {
+        inv[i] = p - inv[p % i] * (p / i) % p;
+    }
+}
+
+//阶乘
+ll N[200001];
+void initial_N(int n) {
+    N[0] = 1;
+    for (ll i = 1;i <= n;i++) {
+        N[i] = N[i - 1] * i % mod;
+    }
+}
+
+//连续阶乘逆元的线性递推
+//即阶乘的逆元
+ll invN[200001];
+void initial_invN(int n) {
+    invN[0] = 1;
+    invN[n] = inv_(N[n], mod);
+    for (ll i = n - 1;i >= 1;i--) {
+        invN[i] = (i + 1) * invN[i + 1] % mod;
+    }
+}
+
+ll C(ll n, ll m) {
+    if (m == 0 || m == n)return 1;
+    else if (m<0 || m>n)return 0;
+    ll ans = N[n] % mod * inv_(N[m] * N[n - m], mod) % mod;
+    return ans;
+}
+
+//同余原理
+void Properties_of_Congruence() {
+    ll a, b;
+    cin >> a >> b;
+
+    //加法
+    //(a%m+b%m)%m=(a+b)%m
+    cout << (a % mod + b % mod) % mod << ' ';
+    cout << (a + b) % mod << '\n';
+
+    //乘法
+    //(a%m*b%m)%m=(a*b)%mod
+    //-a%mod=(-a%mod+mod)%mod=(mod-a)%mod
+    //例,-3%7=(-3%7+7)%7=4%7
+    cout << (a % mod * b % mod) % mod << ' ';
+    cout << (a * b) % mod << '\n';
+
+    //减法
+    //(a-b)%mod=(a%mod-b%mod+mod)%mod
+    //+mod解决负数的问题
+    cout << (a - b + mod) % mod << ' ';
+    cout << (a % mod - b % mod + mod) % mod << '\n';
+
+    //除法,逆元
+    //a/b%mod应该写为a*inv(b)%mod的形式
+    cout << a * inv_(b, mod) % mod << '\n';
+}
+
+//2的幂快速判断
+void isPw2(int n) {
+    //若x>0,x&(~x+1)==x则x是2的幂
+    //~x+1=-x
+    if (n == 0) {
+        cout << 'F' << '\n';
+        return;
+    }
+    if ((n & (-n)) == n) {
+        cout << 'T' << '\n';
+    }
+    else {
+        cout << 'F' << '\n';
+    }
+}
+
+//Raney引理:若整数序列(下标1~m)每一项不超过1(a[i]<=1),总和为正整数n,
+//则它的m个循环移位中恰有n个移位的所有非空前缀和为正
+void Raney() {
+    cout << "Raney:" << '\n';
+    const int m = 22;
+    int arr[m + 1] = { 0,1,1,1,-2,1,-1,1,1,-3,1,1,
+        -2,1,1,1,1,1,1,-1,-2,1,1 };
+    int n = 0;
+    for (int i = 1;i <= m;i++) {
+        n += arr[i];
+    }
+    cout << n << ' ' << m << '\n';
+    int cnt = 0;
+    for (int i = 1;i <= m;i++) {
+        int sum = 0;
+        int flg = 1;
+        for (int j = i;j <= i + m - 1;j++) {
+            sum += arr[(j - 1) % m + 1];
+            if (sum <= 0)flg = 0;
+        }
+        if (flg)cnt++;
+    }
+    cout << "n: " << n << '\n';
+    cout << "cnt: " << cnt << '\n';
+}
+
+class Mat_pos {
+
+private:
+
+    const static int mod = 1e9 + 7;
+
+    //例题1数据：
+    const static int MAXN = 1000;
+    ll f[MAXN + 1] = { 0,1,2,5 };
+    vector<vector<ll>>arr = { {5,2,1} };
+    vector<vector<ll>>mat = { {2,1,0},
+                            {0,0,1},
+                            {1,0,0} };
+
+
+    //例题2数据：
+    const static int MAXM = 1e5;
+    const static int f01 = 3;
+    vector<vector<ll>>arr02 = { {1,1,0,1,0,0} };
+    vector<vector<ll>>mat02 = { {1,1,0,1,0,0},
+                           {1,0,1,1,0,0},
+                           {1,0,0,1,0,0},
+                           {0,0,0,1,1,0},
+                           {0,0,0,1,0,1},
+                           {0,0,0,1,0,0} };
+    //矩阵快速幂
+    //解决固定关系,严格应用于方阵
+    //复杂度O(log2n*k的3次幂)
+
+    //矩阵相乘
+    //二维矩阵
+    vector<vector<ll>> multiply(vector<vector<ll>>a, vector<vector<ll>>b) {
+        int n = a.size();//前行
+        int m = b[0].size();//后列
+        int k = a[0].size();//前列
+        vector<vector<ll>>ans(n, vector<ll>(m));
+        for (int i = 0;i < n;i++) {
+            for (int j = 0;j < m;j++) {
+                for (int c = 0;c < k;c++) {
+                    ans[i][j] = (ans[i][j] + (a[i][c] * b[c][j]) % mod) % mod;
+                }
+            }
+        }
+        return ans;
+    }
+
+    //矩阵快速幂
+    vector<vector<ll>> Pow_Mat(vector<vector<ll>>m, ll p) {
+        int n = m.size();//行
+        vector<vector<ll>>ans(n, vector<ll>(n));
+        for (int i = 0;i < n;i++) {
+            ans[i][i] = 1;
+        }
+        while (p) {
+            if (p & 1) {
+                ans = multiply(ans, m);
+            }
+            m = multiply(m, m);
+            p >>= 1;
+        }
+        return ans;
+    }
+
+    //f(n,h)h=0,1
+    //表示2*n的矩阵+边角1格的方案数
+    //一型即水平或竖直两格,二型即L状三格
+    int f1(int n, int h) {
+        if (n == 0) {
+            return h == 0 ? 1 : 0;
+        }
+        if (n == 1) {
+            return 1;
+        }
+        if (h == 1) {
+            //边角分别放二型,一型
+            return f1(n - 1, 0) + f1(n - 1, 1);
+        }
+        else {
+            //边角分别放竖直一型,两个水平一型,一个二型
+            return f1(n - 1, 0) + f1(n - 2, 0) + 2 * f1(n - 2, 1);
+        }
+    }
+
+    ll num = 0;
+    void f2(int n, string s, int cntA) {
+        if (cntA >= 2)return;
+        if (n == 0) {
+            int A = 0;
+            for (int i = 0;i < s.size();i++) {
+                if (i + 2 < s.size()) {
+                    if (s[i] == 'L' && s[i + 1] == 'L' && s[i + 2] == 'L') {
+                        return;
+                    }
+                }
+                if (s[i] == 'A')A++;
+            }
+            if (A < 2) {
+                num++;
+            }
+            return;
+        }
+        f2(n - 1, s + 'A', cntA + 1);
+        f2(n - 1, s + 'L', 0);
+        f2(n - 1, s + 'P', 0);
+    }
+
+public:
+
+    //斐波那契数列快速幂:(1维2阶)
+    //int a[][]={{1,1},{1,0}};
+    //{f[n],f[n-1]}={{f[1],f[0]}}*Pow_Mat(a,n-1);
+
+    ll Mat_pow_1_k(int n) {
+        //解决1维k阶
+        //例题：https://leetcode.cn/problems/domino-and-tromino-tiling/description/
+        //暴力打表找规律,函数f1(n,0)
+        //f[i]=2*f[i-1]+f[i-3]
+        //{f[i+1],f[i],f[i-1]}={f[i],f[i-1],f[i-2]}*{{2,0,1},{1,0,0},{0,1,0}};
+
+        vector<vector<ll>>ans;
+        if (n <= 3) {
+            return f[n];
+        }
+        else {
+            ans = multiply(arr, Pow_Mat(mat, ll(n - 3)));
+        }
+        return ans[0][0];
+    }
+
+    ll Mat_pow_k_1(int n) {
+        //解决k维1阶
+        //例题：https://leetcode.cn/problems/student-attendance-record-ii/description/
+        if (n <= 1) {
+            return f01;
+        }
+        else {
+            vector<vector<ll>>ans;
+            ans = multiply(arr, Pow_Mat(mat, n - 1));
+            ll res = 0;
+            for (int i = 0;i < 6;i++) {
+                res = (res + ans[0][i]) % mod;
+            }
+            return res;
+        }
+    }
+};
+
+class Inclusion_Exclusion {//容斥原理
+    //+C(k,1)的和-C(k,2)的交集+C(k,3)的和-C(k,4)的交集+......
+    //奇数个+,偶数个-
+    //例题:https://codeforces.com/problemset/problem/803/F
+    //例题:https://www.luogu.com.cn/problem/P1450
+
+private:
+    const static int mod = 1e9 + 7;
+    int cnt[100001];
+    ll dp[100001];
+    //dp[i]表示以i为最小公约数的子序列个数
+    ll pow2[100001];
+    void initial() {
+        pow2[0] = 1;
+        for (ll i = 1;i <= 100000;i++) {
+            cnt[i] = 0;
+            pow2[i] = pow2[i - 1] * 2LL % mod;
+        }
+    }
+
+    ll dp02[100001];
+
+public:
+    void solve01() {
+        initial();
+        int n;
+        cin >> n;
+        ll max_val = 1;
+        for (int i = 1;i <= n;i++) {
+            int x;
+            cin >> x;
+            cnt[x]++;
+            max_val = max(max_val, (ll)x);
+        }
+        //数组中,包含i本身的gcd=i的子序列,需要满足所有其他元素都是i的倍数
+        for (int i = max_val;i >= 1;i--) {
+            ll count = 0;
+            for (int j = i;j <= max_val;j += i) {
+                count += cnt[j];
+            }
+            dp[i] = (pow2[count] - 1 + mod) % mod;
+            for (int j = i + i;j <= max_val;j += i) {
+                dp[i] = (dp[i] - dp[j] + mod) % mod;
+            }
+        }
+        cout << dp[1] << '\n';
+    }
+
+    void solve02() {
+        //假定无个数限制,dp[s]完全背包表示1~i凑到s元的所有方案数
+        //dp[s-(di+1)*ci]表示第i枚硬币花费超出di个的方案数
+        //根据容斥原理求1~4都花费超出的方案数
+        ll value[4];
+        ll cnt[4];
+        int n;
+        cin >> value[0] >> value[1] >> value[2] >> value[3] >> n;
+        dp[0] = 1;
+        //完全背包问题
+        for (int i = 0;i <= 3;i++) {
+            for (int j = value[i];j <= 100000;j++) {
+                dp[j] += dp[j - value[i]];
+            }
+        }
+        for (int i = 0;i < n;i++) {
+            ll s;
+            for (int i = 0;i < 4;i++) {
+                cin >> cnt[i];
+            }
+            cin >> s;
+            //0001->1111(1->15)
+            //用位状态表示第1~i枚硬币的违规状态的方案数
+            ll illegal = 0;//非法
+            for (int i = 1;i <= ((1 << 4) - 1);i++) {
+                ll tmp = s;//总值
+                int flg = 0;//标记加/减
+                for (int j = 0;j <= 3;j++) {
+                    //查看各位的状态
+                    if ((i >> j) & 1) {
+                        tmp -= value[j] * (cnt[j] + 1);
+                        flg ^= 1;
+                    }
+                }
+                if (tmp >= 0) {
+                    illegal += flg ? dp[tmp] : -dp[tmp];
+                }
+            }
+            cout << dp[s] - illegal << '\n';
+        }
+    }
+
+};
+
+//中国剩余定理
+void Chinese_Remainder_Theorem() {
+
+}
+
+//裴蜀定理
+void Bézout_theorem() {
+}
+
+
+//小结论
+ll ff(ll n, ll l, ll k) {
+    //n个元素(数量不限),要求用n个元素凑出长度=l的数组
+    //两个相同元素之间的间隔要>=k
+    //0<=k<n<=l
+    //可能的方案数=n!*(n-k)^(l-k)/(n-k)!
+    //n-k的l-k次幂
+    return N[n] * pw(n - k, l - k) % mod * inv_(N[n - k], mod);
+}
+
+
+//强哥德巴赫猜想:任意大于2的偶数都可以表示成两个质数之和,该猜想对于[1,1e9]内的整数已证明满足
+
+//弱哥德巴赫猜想(此猜想已被彻底证明成立):任一大于5的奇数都可以表示成三个质数之和
+//其中若n&1且n-2是质数则最少可以拆为2个
+
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    return 0;
+}

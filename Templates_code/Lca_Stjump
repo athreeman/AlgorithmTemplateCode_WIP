@@ -1,0 +1,163 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+const int MAXN = 5e5;
+int n, q, root;
+int idx = 0;
+int head[MAXN + 1];
+int nxt[2 * MAXN + 1];
+int to[2 * MAXN + 1];
+int depth[MAXN + 1];
+
+void add_edge(int u, int v)
+{
+    nxt[++idx] = head[u];
+    head[u] = idx;
+    to[idx] = v;
+}
+int stjump[MAXN + 1][20];
+const int power = 19;
+
+//递归改迭代
+int road[MAXN + 1][3];
+int stasiz = -1;
+int p, fp, e;
+
+void push(int u, int f, int ed) {
+    ++stasiz;//申请空间
+    road[stasiz][0] = u;
+    road[stasiz][1] = f;
+    road[stasiz][2] = ed;
+}
+
+void pop() {
+    p = road[stasiz][0];
+    fp = road[stasiz][1];
+    e = road[stasiz][2];
+    stasiz--;//空间撤销
+}
+
+
+//递归改迭代
+//push已处理状态->pop获取状态
+//pop获取最新状态->e获取下一条边->push推入最新已处理状态->push进入该边e指向的子节点(若指向点!=父节点)->pos.....
+void dfs_sta(int root) {
+    stasiz = 0;
+    depth[0] = 0;
+    //入栈,状态:当前节点,根节点,边
+    push(root, 0, -1);
+    while (stasiz > 0) {
+        //出栈
+        pop();
+        //当前边尚未遍历
+        if (e == -1) {
+            //处理深度
+            depth[p] = depth[fp] + 1;
+            //一步可达点
+            stjump[p][0] = fp;
+            //父节点方向路径已遍历过,处理
+            for (int r = 1;r <= power;r++) {
+                if ((depth[p] - (1 << (r - 1))) < 1)stjump[p][r] = -1;
+                else stjump[p][r] = stjump[stjump[p][r - 1]][r - 1];
+            }
+            //获取边
+            e = head[p];
+        }
+        else {
+            //已有边,获取下一个边
+            e = nxt[e];
+        }
+        //有效边
+        if (e != 0) {
+            //入栈
+            push(p, fp, e);
+            //若边指向的不是父节点,向下入栈
+            //相当于递归的向下遍历
+            if (to[e] != fp) {
+                push(to[e], p, -1);
+            }
+        }
+    }
+}
+
+void dfs(int p, int fp)
+{
+    //深度=父节点+1
+    depth[p] = depth[fp] + 1;
+    //根节点,无论如何上跳都非法
+    if (p == root)fill(stjump[p], stjump[p] + 20, -1);
+    else
+    {
+        //遍历到即处理,因为可到达的上层节点,都已处理
+        //上跳2的0次幂即1步就是父节点
+        stjump[p][0] = fp;
+        for (int r = 1;r <= power;r++)
+        {
+            //上跳2的r次幂步,若<1非法
+            if ((depth[p] - (1 << (r - 1))) < 1)stjump[p][r] = -1;
+            else stjump[p][r] = stjump[stjump[p][r - 1]][r - 1];
+        }
+    }
+    for (int edge = head[p];edge > 0;edge = nxt[edge])
+    {
+        int sp = to[edge];
+        if (sp == fp)continue;
+        dfs(sp, p);
+    }
+}
+
+int LCA(int a, int b)
+{
+    //让a,b处于同一层
+    if (depth[a] != depth[b])
+    {
+        //让a层数大,便于处理
+        if (depth[a] < depth[b])swap(a, b);
+        //向上跳跃
+        for (int p = power;p >= 0;p--)
+        {
+            //若层数<b,跳的太多,非法
+            int jump = stjump[a][p];
+            if (jump == -1)continue;
+            if (depth[jump] >= depth[b])a = jump;
+        }
+    }
+    //a==b,以满足LCA
+    if (a == b)return a;
+    //同步上跳,保证路径点不相同
+    //最后一个点的父节点即LCA
+    for (int p = power;p >= 0;p--)
+    {
+        int jump_a = stjump[a][p];
+        int jump_b = stjump[b][p];
+        if (jump_a == -1 || jump_b == -1)continue;
+        if (jump_a != jump_b)a = jump_a, b = jump_b;
+    }
+    return stjump[a][0];
+}
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    //题目链接:https://www.luogu.com.cn/problem/P3379
+    cin >> n >> q >> root;
+    depth[0] = 0;
+    //无向图
+    for (int i = 1;i <= n - 1;i++)
+    {
+        int u, v;
+        cin >> u >> v;
+        add_edge(u, v);
+        add_edge(v, u);
+    }
+    //dfs(root,0);
+    dfs_sta(root);
+    while (q--)
+    {
+        int a, b;
+        cin >> a >> b;
+        cout << LCA(a, b) << '\n';
+    }
+    return 0;
+}

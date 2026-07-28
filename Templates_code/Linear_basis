@@ -1,0 +1,363 @@
+#include<bits/stdc++.h>
+using ll = long long;
+using ld = double;
+using std::swap;
+using std::fill;
+using std::max;
+using std::vector;
+using std::cin, std::cout;
+//基：可以表示原空间所有元素的一组极小线性无关组(不唯一)
+
+class SSS {
+    //例题：https://www.luogu.com.cn/problem/P3292
+    //倍增表求lca+线性基
+    //u->v路径异或最大值
+    //从根节点,维护每个节点的线性基,每一位保留层数最大的
+private:
+
+    using ll = long long;
+    using ld = double;
+
+    const static int MAXN = 2e4;
+    const static int limit = 15;
+    const static int bit = 61;
+
+    ll w[MAXN + 1];//点权
+    ll bases[MAXN + 1][bit + 1] = {};
+    int levels[MAXN + 1][bit + 1] = {};
+    int deep[MAXN + 1];
+    ll basis[bit + 1] = {};
+
+    int power = 0;
+    int stjump[MAXN + 1][limit + 1] = {};
+
+    int head[MAXN + 1];
+    int next[2 * MAXN + 1];
+    int to[2 * MAXN + 1];
+    int idx = 0;
+
+    void add_edge(int u, int v) {
+        next[++idx] = head[u];
+        head[u] = idx;
+        to[idx] = v;
+    }
+
+    int cur, father, edge;
+    int stadfs[2 * MAXN + 1][3];
+    int stasiz = 0;
+
+    void push(int p, int fp, int e) {
+        ++stasiz;
+        stadfs[stasiz][0] = p;
+        stadfs[stasiz][1] = fp;
+        stadfs[stasiz][2] = e;
+    }
+
+    void pop() {
+        cur = stadfs[stasiz][0];
+        father = stadfs[stasiz][1];
+        edge = stadfs[stasiz][2];
+        stasiz--;
+    }
+
+    void copy(int u, int v) {
+        //u->v
+        for (int i = 0;i <= bit;i++) {
+            bases[v][i] = bases[u][i];
+            levels[v][i] = levels[u][i];
+        }
+    }
+
+    void insert(int p, ll curv, int curl) {
+        for (int i = bit;i >= 0;i--) {
+            if ((curv >> i) & 1) {
+                if (bases[p][i] == 0) {
+                    bases[p][i] = curv;
+                    levels[p][i] = curl;
+                    return;
+                }
+                else if (bases[p][i] != 0 && levels[p][i] < curl) {
+                    ll tmpv = curv;
+                    ll tmpl = curl;
+                    curv = bases[p][i];
+                    curl = levels[p][i];
+                    bases[p][i] = tmpv;
+                    levels[p][i] = tmpl;
+                    curv ^= bases[p][i];
+                }
+                else {
+                    curv ^= bases[p][i];
+                }
+            }
+        }
+    }
+
+    //明确插入basis
+    void insert_basis(ll val) {
+        for (int i = bit;i >= 0;i--) {
+            if ((val >> i) & 1) {
+                if (basis[i] == 0) {
+                    basis[i] = val;
+                    return;
+                }
+                else {
+                    val ^= basis[i];
+                }
+            }
+        }
+    }
+
+    void dfs_sta(int root) {
+        stasiz = 1;
+        deep[0] = 0;
+        push(root, 0, -1);
+        while (stasiz > 0) {
+            pop();
+            if (edge == -1) {
+                deep[cur] = deep[father] + 1;
+                copy(father, cur);//father->cur
+                insert(cur, w[cur], deep[cur]);//w[i]插入线性基,更新
+                stjump[cur][0] = father;
+                for (int r = 1;r <= power;r++) {
+                    stjump[cur][r] = stjump[stjump[cur][r - 1]][r - 1];
+                }
+                edge = head[cur];
+            }
+            else {
+                edge = next[edge];
+            }
+            if (edge != 0) {
+                push(cur, father, edge);
+                if (to[edge] != father) {
+                    push(to[edge], cur, -1);
+                }
+            }
+        }
+    }
+
+    int lca(int x, int y) {
+        if (deep[x] != deep[y]) {
+            if (deep[x] < deep[y]) {
+                swap(x, y);
+            }
+            for (int r = power;r >= 0;r--) {
+                if (deep[stjump[x][r]] >= deep[y]) {
+                    x = stjump[x][r];
+                }
+            }
+        }
+        if (x == y) {
+            return x;
+        }
+        for (int r = power;r >= 0;r--) {
+            int jumpx = stjump[x][r];
+            int jumpy = stjump[y][r];
+            if (jumpx != jumpy) {
+                x = jumpx;
+                y = jumpy;
+            }
+        }
+        return stjump[x][0];
+    }
+
+    ll query(int x, int y) {
+        int root = lca(x, y);
+        fill(basis, basis + bit + 1, 0);
+        for (int p : {x, y}) {
+            for (int i = 0;i <= bit;i++) {
+                if (bases[p][i] != 0 && levels[p][i] >= deep[root]) {
+                    insert_basis(bases[p][i]);
+                }
+            }
+        }
+        ll ans = 0;
+        for (int i = bit;i >= 0;i--) {
+            ans = max(ans, ans ^ basis[i]);
+        }
+        return ans;
+    }
+
+    void prepare(int n) {
+        fill(head, head + n + 1, 0);
+        idx = 0;
+        stasiz = 0;
+        while ((1 << (power + 1)) <= n) {
+            power++;
+        }
+    }
+
+public:
+
+    void solve() {
+        int n, q;
+        cin >> n >> q;
+        prepare(n);
+        for (int i = 1;i <= n;i++) {
+            cin >> w[i];
+        }
+        for (int i = 1;i < n;i++) {
+            int u, v;
+            cin >> u >> v;
+            add_edge(u, v);
+            add_edge(v, u);
+        }
+        dfs_sta(1);
+        while (q--) {
+            int x, y;
+            cin >> x >> y;
+            cout << query(x, y) << '\n';
+        }
+    }
+
+};
+
+
+//异或空间线性基
+class Xor_basis {
+private:
+
+    const static int MAXN = 1e5;
+    ll basis[MAXN + 1];//线性基
+    int len;
+    bool zero = false;
+
+    //普通消元法
+    ll basis_normal[64];
+    //需要先初始化线性基数组为0
+    bool insert(ll val) {
+        for (int i = 63;i >= 0;i--) {
+            if ((val >> i) & 1) {
+                if (basis_normal[i] == 0) {
+                    basis_normal[i] = val;
+                    return true;
+                }
+                else {
+                    val ^= basis_normal[i];
+                }
+            }
+            if (val == 0) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+
+    //高斯消元求解线性基
+    void gauss(int n, int bit) {
+        //1~n行,bit~0位
+        len = 1;
+        for (int i = bit;i >= 0;i--) {
+            if (len > n)break;
+            for (int j = len;j <= n;j++) {
+                if ((basis[j] >> i) & 1) {
+                    swap(basis[j], basis[len]);
+                    break;
+                }
+            }
+            if ((basis[len] >> i) & 1) {
+                for (int j = 1;j <= n;j++) {
+                    if (j != len && ((basis[j] >> i) & 1)) {
+                        basis[j] ^= basis[len];
+                    }
+                }
+                len++;
+            }
+        }
+        len--;
+        zero = (len != n);
+    }
+
+    //获取第k小的非0异或和,仅限高斯消元法
+    ll query(ll k) {
+        // 若询问的是包含0异或和的第k个
+        // 需要添加如下判断
+        // if(zero&&k==1){
+        //     return 0;
+        // }
+        // if(zero){
+        //     k--;
+        // }
+        if (k >= (1LL << len)) {
+            //无解
+            return -1;
+        }
+        ll ans = 0;
+        for (int i = 63;i >= 0;i--) {
+            if ((k >> i) & 1) {
+                ans ^= basis[len - i];
+            }
+        }
+        return ans;
+    }
+
+public:
+
+};
+
+//向量空间线性基
+class Vector_basis {
+
+private:
+
+    const static int MAXN = 2e5;
+    constexpr static ld eps = 1e-7;
+    //以三维空间为例
+    int basis_normal[MAXN + 1];
+    int len = 1;
+    bool zero;
+
+    //普通消元求解线性基
+    //传参：插入第i个,共m维,原空间mat
+    bool insert(int i, int m, vector<vector<ld>>& mat) {
+        for (int j = 1;j <= m;j++) {
+            if (fabs(mat[i][j]) < eps) {
+                continue;
+            }
+            if (!basis_normal[j]) {
+                basis_normal[j] = i;
+                return true;
+            }
+            ld rate = mat[i][j] / mat[basis_normal[j]][j];
+            for (int k = j;k <= m;k++) {
+                mat[i][k] -= rate * mat[basis_normal[j]][k];
+            }
+        }
+        return false;
+    }
+
+    //高斯消元求解线性基
+    //传参：n个原向量,维度,原空间mat
+    void gauss(int n, int m, vector<vector<ld>>& basis) {
+        len = 1;
+        for (int i = 1;i <= m;i++) {
+            for (int j = len;j <= n;j++) {
+                if (fabs(basis[j][i]) > eps) {
+                    swap(basis[j], basis[len]);
+                    break;
+                }
+            }
+            if (fabs(basis[len][i]) > eps) {
+                for (int j = 1;j <= n;j++) {
+                    if (j != len && fabs(basis[j][i]) > eps) {
+                        ld rate = basis[j][i] / basis[len][i];
+                        for (int k = i;k <= m;k++) {
+                            basis[j][k] -= basis[len][k] * rate;
+                        }
+                    }
+                }
+                len++;
+            }
+        }
+        len--;
+    }
+
+};
+
+int main() {
+    using namespace std;
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    return 0;
+}
