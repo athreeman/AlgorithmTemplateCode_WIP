@@ -109,6 +109,14 @@ void Properties_of_Congruence() {
     int x=3;
     int mod=17;
     int ymod=(mod-x%mod)%mod;
+
+    //(a+b)%mod==j
+    //给定a,b%mod=((j-a)%mod+mod)%mod
+    //(c+d)%17=11
+    int c=5;
+    int r=11;
+    mod=17;
+    int dmod=((r-c)%mod+mod)%mod;
 }
 
 //2的幂快速判断
