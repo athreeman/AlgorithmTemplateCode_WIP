@@ -102,6 +102,13 @@ void Properties_of_Congruence() {
     //除法,逆元
     //a/b%mod应该写为a*inv(b)%mod的形式
     cout << a * inv_(b, mod) % mod << '\n';
+
+    //若(a+b)%mod=0
+    //给定a,则b%mod=(mod-a%mod)%mod
+    //(x+y)%17=0
+    int x=3;
+    int mod=17;
+    int ymod=(mod-x%mod)%mod;
 }
 
 //2的幂快速判断
