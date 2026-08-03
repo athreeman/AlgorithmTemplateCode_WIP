@@ -2,8 +2,8 @@
 using namespace std;
 using ll = long long;
 #define ill __int128_t
-const int MAXN = 2e5;
-bitset<2 * MAXN + 1>vis;//标记质数
+const int MAXN = 1e7;
+bitset<2 * MAXN + 1>isPrime;//标记质数
 vector<ll>Primes;//存储质数
 vector<ll>factors[2 * MAXN + 1];//facotrs[i]存储i的质因数
 
@@ -41,6 +41,8 @@ ll pw(ll a, ll b, ll mod) {
     }
     return res;
 }
+
+
 //Miller_Rabin算法测质数
 //辅助验证函数
 bool witness(ll a, ll n) {
@@ -87,13 +89,13 @@ void getPrimes_Eratosthenes(ll n) {
     //埃氏筛
     //复杂度O(n*log2(log2n))
     //获取1~n的所有质数
-    vis.set();
-    vis[0] = vis[1] = 0;
+    isPrime.set();
+    isPrime[0] = isPrime[1] = 0;
     for (ll i = 2;i <= n;i++) {
-        if (vis[i]) {
+        if (isPrime[i]) {
             Primes.push_back(i);
             for (ll j = i * i;j <= n;j += i) {
-                vis[j] = 0;
+                isPrime[j] = 0;
             }
         }
     }
@@ -103,13 +105,13 @@ void getPrimes_Linear(ll n) {
     //欧拉线性筛
     //复杂度O(n)
     //获取1~n的所有质数
-    vis.set();
-    vis[0] = vis[1] = 0;
+    isPrime.set();
+    isPrime[0] = isPrime[1] = 0;
     for (ll i = 2;i <= n;i++) {
-        if (vis[i])Primes.push_back(i);
+        if (isPrime[i])Primes.push_back(i);
         for (ll val : Primes) {
             if (val * i > n)break;
-            vis[i * val] = 0;
+            isPrime[i * val] = 0;
             if (i % val == 0)break;
         }
     }
@@ -119,14 +121,30 @@ void getFactors(ll n) {
     //复杂度O(sqrt(n)/log2(n))
     //分解n的质因数
     ll val = n;
+    if (isPrime[n] == 1) {
+        factors[n].push_back(n);
+        return;
+    }
     for (ll p : Primes) {
-        if (val < p)break;
+        if (val == 1)break;
+        if ((ll)p * p > (ll)val)break;
         if (val % p != 0)continue;
         factors[n].push_back(p);
         while (val % p == 0)val /= p;
     }
-    if (val > 2)factors[n].push_back(val);
+    if (val > 1)factors[n].push_back(val);
 }
+
+//获取1~n范围的所有数的质因数
+void GetFactors(ll n) {
+    for (int p : Primes) {
+        for (int i = p;i <= n;i += p) {
+            factors[i].push_back(p);
+        }
+    }
+}
+
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
