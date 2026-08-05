@@ -34,6 +34,10 @@ private:
     bool TopoSort(int n) {
         //拓扑排序
         //入度删除法,入度为0入队,依次删除影响
+
+        //如若需要输出字典序最小的排序
+        //把队列更改为小根堆即可
+        //priority_queue<int,vector<int>,greater<int>>q;
         queue<int>q;
         for (int i = 1;i <= n;i++) {
             if (indegree[i] == 0) {
