@@ -13,6 +13,10 @@ namespace name {
 
 using namespace name;
 
+//拓扑排序可以用于环的查询
+//拓扑排序操作完成后
+//剩余的度数>0的点,就是环上点
+
 class Tmp {
 private:
     //纯粹的拓朴排序模板代码
