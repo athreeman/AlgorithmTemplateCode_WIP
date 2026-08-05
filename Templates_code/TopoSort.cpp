@@ -6,6 +6,9 @@ namespace name {
     using std::min;
     using std::fill;
     using std::cin, std::cout;
+    using std::vector;
+    using std::greater;
+    using std::priority_queue;
 };
 
 using namespace name;
@@ -46,7 +49,7 @@ private:
         }
 
         while (q.size()) {
-            int cur = q.front();
+            int cur = q.front();//q.top()
             q.pop();
             rank[++cnt] = cur;
             for (int edge = head[cur];edge > 0;edge = next[edge]) {
