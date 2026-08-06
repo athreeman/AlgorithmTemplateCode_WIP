@@ -7,125 +7,161 @@ using std::max;
 using std::vector;
 using std::cin;
 using std::cout;
+
 //基：可以表示原空间所有元素的一组极小线性无关组(不唯一)
+//应用普通消元法或高斯消元法
+//高斯消元优点：查询第k小
 
-class Basis_AND_Tree {
+
+
+//异或空间线性基
+class Xor_basis {
 private:
-    const static int MAXN = 5e4;
-    const static int MAXM = 1e5;
-    const static int bit = 61;
 
-    int idx = 0;
-    int head[MAXN + 1] = {};
-    int next[2 * MAXM + 1];
-    int to[2 * MAXM + 1];
-    ll weight[2 * MAXM + 1];
-    ll path[MAXN + 1];
-    int vis[MAXN + 1] = {};
-    ll basis[bit + 1] = {};
+    const static int MAXN = 1e5;
+    ll basis[MAXN + 1];//线性基
+    int len;
+    bool zero = false;
 
-    void insert(ll val) {
-        for (int i = bit;i >= 0;i--) {
+    //普通消元法
+    ll basis_normal[64];
+    //需要先初始化线性基数组为0
+    bool insert(ll val) {
+        for (int i = 63;i >= 0;i--) {
             if ((val >> i) & 1) {
-                if (basis[i] == 0) {
-                    basis[i] = val;
-                    return;
-                }
-                val ^= basis[i];
-            }
-        }
-    }
-
-    void add_edge(int u, int v, ll w) {
-        next[++idx] = head[u];
-        head[u] = idx;
-        to[idx] = v;
-        weight[idx] = w;
-    }
-
-    int stasiz = 0;
-    ll ufe[2 * MAXM + 1][4];
-    int u, f, e;
-    ll w;
-
-    void push(int u, int f, int e, ll w) {
-        ++stasiz;
-        ufe[stasiz][0] = u;
-        ufe[stasiz][1] = f;
-        ufe[stasiz][2] = e;
-        ufe[stasiz][3] = w;
-
-    }
-
-    void pop() {
-        u = ufe[stasiz][0];
-        f = ufe[stasiz][1];
-        e = ufe[stasiz][2];
-        w = ufe[stasiz][3];
-        stasiz--;
-    }
-
-    void dfs(int root) {
-        stasiz = 1;
-        push(root, 0, -1, 0);
-        while (stasiz > 0) {
-            pop();
-            if (e == -1) {
-                //首次抵达
-                path[u] = w;
-                vis[u] = 1;
-                e = head[u];
-            }
-            else {
-                //下条边
-                e = next[e];
-            }
-            if (e != 0) {
-                //有效边
-                push(u, f, e, w);
-                int v = to[e];
-                //获取路径异或和
-                ll Xor = w ^ weight[e];
-                if (vis[v]) {
-                    //此处环判断,同步解决了回退父节点问题
-                    //环,不入栈(入递归)
-                    //插入线性基
-                    insert(Xor ^ path[v]);
+                if (basis_normal[i] == 0) {
+                    basis_normal[i] = val;
+                    return true;
                 }
                 else {
-                    //非环,入栈
-                    push(v, u, -1, Xor);
+                    val ^= basis_normal[i];
                 }
             }
+            if (val == 0) {
+                return false;
+            }
         }
+        return false;
     }
 
-    ll query(ll val) {
+
+    //高斯消元求解线性基
+    void gauss(int n, int bit) {
+        //1~n行,bit~0位
+        len = 1;
         for (int i = bit;i >= 0;i--) {
-            val = max(val, val ^ basis[i]);
+            if (len > n)break;
+            for (int j = len;j <= n;j++) {
+                if ((basis[j] >> i) & 1) {
+                    swap(basis[j], basis[len]);
+                    break;
+                }
+            }
+            if ((basis[len] >> i) & 1) {
+                for (int j = 1;j <= n;j++) {
+                    if (j != len && ((basis[j] >> i) & 1)) {
+                        basis[j] ^= basis[len];
+                    }
+                }
+                len++;
+            }
         }
-        return val;
+        len--;
+        zero = (len != n);
+    }
+
+    //获取第k小的非0异或和,仅限高斯消元法
+    ll query(ll k) {
+        // 若询问的是包含0异或和的第k个
+        // 需要添加如下判断
+        // if(zero&&k==1){
+        //     return 0;
+        // }
+        // if(zero){
+        //     k--;
+        // }
+        if (k >= (1LL << len)) {
+            //无解
+            return -1;
+        }
+        ll ans = 0;
+        for (int i = 63;i >= 0;i--) {
+            if ((k >> i) & 1) {
+                ans ^= basis[len - i];
+            }
+        }
+        return ans;
     }
 
 public:
-    void solve() {
-        int n, m;
-        cin >> n >> m;
-        for (int i = 1;i <= m;i++) {
-            int u, v;
-            ll w;
-            cin >> u >> v >> w;
-            add_edge(u, v, w);
-            add_edge(v, u, w);
+
+};
+
+//向量空间线性基
+class Vector_basis {
+
+private:
+
+    const static int MAXN = 2e5;
+    constexpr static ld eps = 1e-7;
+    //以三维空间为例
+    int basis_normal[MAXN + 1];
+    int len = 1;
+    bool zero;
+
+    //普通消元求解线性基
+    //传参：插入第i个,共m维,原空间mat
+    bool insert(int i, int m, vector<vector<ld>>& mat) {
+        for (int j = 1;j <= m;j++) {
+            if (fabs(mat[i][j]) < eps) {
+                continue;
+            }
+            if (!basis_normal[j]) {
+                basis_normal[j] = i;
+                return true;
+            }
+            ld rate = mat[i][j] / mat[basis_normal[j]][j];
+            for (int k = j;k <= m;k++) {
+                mat[i][k] -= rate * mat[basis_normal[j]][k];
+            }
         }
-        dfs(1);
-        cout << query(path[n]) << '\n';
+        return false;
+    }
+
+    //高斯消元求解线性基
+    //传参：n个原向量,维度,原空间mat
+    void gauss(int n, int m, vector<vector<ld>>& basis) {
+        len = 1;
+        for (int i = 1;i <= m;i++) {
+            for (int j = len;j <= n;j++) {
+                if (fabs(basis[j][i]) > eps) {
+                    swap(basis[j], basis[len]);
+                    break;
+                }
+            }
+            if (fabs(basis[len][i]) > eps) {
+                for (int j = 1;j <= n;j++) {
+                    if (j != len && fabs(basis[j][i]) > eps) {
+                        ld rate = basis[j][i] / basis[len][i];
+                        for (int k = i;k <= m;k++) {
+                            basis[j][k] -= basis[len][k] * rate;
+                        }
+                    }
+                }
+                len++;
+            }
+        }
+        len--;
     }
 
 };
 
 
-class SSS {
+//线性基的实际应用
+//两个例题
+
+
+class solve{
     //例题：https://www.luogu.com.cn/problem/P3292
     //倍增表求lca+线性基
     //u->v路径异或最大值
@@ -328,153 +364,117 @@ public:
 
 };
 
-
-//异或空间线性基
-class Xor_basis {
+class Basis_AND_Tree {
 private:
+    const static int MAXN = 5e4;
+    const static int MAXM = 1e5;
+    const static int bit = 61;
 
-    const static int MAXN = 1e5;
-    ll basis[MAXN + 1];//线性基
-    int len;
-    bool zero = false;
+    int idx = 0;
+    int head[MAXN + 1] = {};
+    int next[2 * MAXM + 1];
+    int to[2 * MAXM + 1];
+    ll weight[2 * MAXM + 1];
+    ll path[MAXN + 1];
+    int vis[MAXN + 1] = {};
+    ll basis[bit + 1] = {};
 
-    //普通消元法
-    ll basis_normal[64];
-    //需要先初始化线性基数组为0
-    bool insert(ll val) {
-        for (int i = 63;i >= 0;i--) {
+    void insert(ll val) {
+        for (int i = bit;i >= 0;i--) {
             if ((val >> i) & 1) {
-                if (basis_normal[i] == 0) {
-                    basis_normal[i] = val;
-                    return true;
+                if (basis[i] == 0) {
+                    basis[i] = val;
+                    return;
+                }
+                val ^= basis[i];
+            }
+        }
+    }
+
+    void add_edge(int u, int v, ll w) {
+        next[++idx] = head[u];
+        head[u] = idx;
+        to[idx] = v;
+        weight[idx] = w;
+    }
+
+    int stasiz = 0;
+    ll ufe[2 * MAXM + 1][4];
+    int u, f, e;
+    ll w;
+
+    void push(int u, int f, int e, ll w) {
+        ++stasiz;
+        ufe[stasiz][0] = u;
+        ufe[stasiz][1] = f;
+        ufe[stasiz][2] = e;
+        ufe[stasiz][3] = w;
+
+    }
+
+    void pop() {
+        u = ufe[stasiz][0];
+        f = ufe[stasiz][1];
+        e = ufe[stasiz][2];
+        w = ufe[stasiz][3];
+        stasiz--;
+    }
+
+    void dfs(int root) {
+        stasiz = 1;
+        push(root, 0, -1, 0);
+        while (stasiz > 0) {
+            pop();
+            if (e == -1) {
+                //首次抵达
+                path[u] = w;
+                vis[u] = 1;
+                e = head[u];
+            }
+            else {
+                //下条边
+                e = next[e];
+            }
+            if (e != 0) {
+                //有效边
+                push(u, f, e, w);
+                int v = to[e];
+                //获取路径异或和
+                ll Xor = w ^ weight[e];
+                if (vis[v]) {
+                    //此处环判断,同步解决了回退父节点问题
+                    //环,不入栈(入递归)
+                    //插入线性基
+                    insert(Xor ^ path[v]);
                 }
                 else {
-                    val ^= basis_normal[i];
+                    //非环,入栈
+                    push(v, u, -1, Xor);
                 }
             }
-            if (val == 0) {
-                return false;
-            }
         }
-        return false;
     }
 
-
-    //高斯消元求解线性基
-    void gauss(int n, int bit) {
-        //1~n行,bit~0位
-        len = 1;
+    ll query(ll val) {
         for (int i = bit;i >= 0;i--) {
-            if (len > n)break;
-            for (int j = len;j <= n;j++) {
-                if ((basis[j] >> i) & 1) {
-                    swap(basis[j], basis[len]);
-                    break;
-                }
-            }
-            if ((basis[len] >> i) & 1) {
-                for (int j = 1;j <= n;j++) {
-                    if (j != len && ((basis[j] >> i) & 1)) {
-                        basis[j] ^= basis[len];
-                    }
-                }
-                len++;
-            }
+            val = max(val, val ^ basis[i]);
         }
-        len--;
-        zero = (len != n);
-    }
-
-    //获取第k小的非0异或和,仅限高斯消元法
-    ll query(ll k) {
-        // 若询问的是包含0异或和的第k个
-        // 需要添加如下判断
-        // if(zero&&k==1){
-        //     return 0;
-        // }
-        // if(zero){
-        //     k--;
-        // }
-        if (k >= (1LL << len)) {
-            //无解
-            return -1;
-        }
-        ll ans = 0;
-        for (int i = 63;i >= 0;i--) {
-            if ((k >> i) & 1) {
-                ans ^= basis[len - i];
-            }
-        }
-        return ans;
+        return val;
     }
 
 public:
-
-};
-
-//向量空间线性基
-class Vector_basis {
-
-private:
-
-    const static int MAXN = 2e5;
-    constexpr static ld eps = 1e-7;
-    //以三维空间为例
-    int basis_normal[MAXN + 1];
-    int len = 1;
-    bool zero;
-
-    //普通消元求解线性基
-    //传参：插入第i个,共m维,原空间mat
-    bool insert(int i, int m, vector<vector<ld>>& mat) {
-        for (int j = 1;j <= m;j++) {
-            if (fabs(mat[i][j]) < eps) {
-                continue;
-            }
-            if (!basis_normal[j]) {
-                basis_normal[j] = i;
-                return true;
-            }
-            ld rate = mat[i][j] / mat[basis_normal[j]][j];
-            for (int k = j;k <= m;k++) {
-                mat[i][k] -= rate * mat[basis_normal[j]][k];
-            }
-        }
-        return false;
-    }
-
-    //高斯消元求解线性基
-    //传参：n个原向量,维度,原空间mat
-    void gauss(int n, int m, vector<vector<ld>>& basis) {
-        len = 1;
+    void solve() {
+        int n, m;
+        cin >> n >> m;
         for (int i = 1;i <= m;i++) {
-            for (int j = len;j <= n;j++) {
-                if (fabs(basis[j][i]) > eps) {
-                    swap(basis[j], basis[len]);
-                    break;
-                }
-            }
-            if (fabs(basis[len][i]) > eps) {
-                for (int j = 1;j <= n;j++) {
-                    if (j != len && fabs(basis[j][i]) > eps) {
-                        ld rate = basis[j][i] / basis[len][i];
-                        for (int k = i;k <= m;k++) {
-                            basis[j][k] -= basis[len][k] * rate;
-                        }
-                    }
-                }
-                len++;
-            }
+            int u, v;
+            ll w;
+            cin >> u >> v >> w;
+            add_edge(u, v, w);
+            add_edge(v, u, w);
         }
-        len--;
+        dfs(1);
+        cout << query(path[n]) << '\n';
     }
 
 };
-
-int main() {
-    using namespace std;
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    return 0;
-}

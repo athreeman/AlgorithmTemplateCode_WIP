@@ -50,14 +50,3 @@ void merge(int u,int v)
         father[ru]=rv;
     }
 }
-
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    int n;
-    cin>>n;
-    initial(n);
-    return 0;
-}

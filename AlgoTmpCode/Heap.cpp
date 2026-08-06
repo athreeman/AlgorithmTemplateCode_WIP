@@ -83,6 +83,7 @@ public:
     int heap[MAXN + 1];
     int siz = 0;
 
+    //读入数据
     void getArr(vector<int>& nums) {
         for (int i = 0;i < nums.size();i++) {
             heap[i] = nums[i];
@@ -101,6 +102,7 @@ public:
         }
     }
 
+    //建堆
     void heapInsert() {
         for (int i = (siz - 2) / 2;i >= 0;i--) {
             siftDown(i);
@@ -117,29 +119,3 @@ public:
     }
 
 };
-
-
-
-
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    vector<int>nums;
-    int n;
-    cin >> n;
-    while (n--) {
-        int in;
-        cin >> in;
-        nums.push_back(in);
-    }
-    MinHeap_n q;
-    q.getArr(nums);
-    q.heapInsert();
-    while (q.siz > 0) {
-        cout << q.pop() << ' ';
-    }
-    cout << '\n';
-    return 0;
-}

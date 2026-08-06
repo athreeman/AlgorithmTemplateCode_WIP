@@ -2,12 +2,16 @@
 using namespace std;
 using ll = long long;
 //容斥原理
-class Inclusion_Exclusion {//容斥原理
-    //+C(k,1)的和-C(k,2)的交集+C(k,3)的和-C(k,4)的交集+......
-    //奇数个+,偶数个-
-    //例题:https://codeforces.com/problemset/problem/803/F
-    //例题:https://www.luogu.com.cn/problem/P1450
 
+//核心:
+//+C(k,1)的和-C(k,2)的交集+C(k,3)的和-C(k,4)的交集+......
+//奇数个+,偶数个-
+//例题:https://codeforces.com/problemset/problem/803/F
+//例题:https://www.luogu.com.cn/problem/P1450
+
+
+
+class Inclusion_Exclusion {//容斥原理
 private:
     const static int mod = 1e9 + 7;
     int cnt[100001];

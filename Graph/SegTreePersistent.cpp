@@ -1,7 +1,17 @@
 #include<bits/stdc++.h>
 using ll = long long;
 using namespace std;
+
 //可持久化线段树(主席树)
+
+//单点修改+单点查询......查询不同版本单点值
+//区间修改+范围查询......查询区间第k小
+//区间修改+范围查询(懒标记)
+//区间修改+区间查询+标记永久化(普通线段树的标记永久化)
+
+//核心：保留原数据,拷贝新节点,范围新编号,获取不同版本
+//功能：查询第k小，维护前缀信息，单点和范围查询
+
 class question01 {
 
     // 例题1题解代码：
@@ -452,18 +462,3 @@ public:
     }
 
 };
-
-question01 q1;
-question02 q2;
-question03 q3;
-question04 q4;
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-
-    q4.solve();
-
-    return 0;
-}

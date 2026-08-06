@@ -1,6 +1,18 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+//BellmanFord和SPFA
+//单源最短路算法
+//队列优化
+//出队->松弛操作->入队(不在队内)->出队
+//要求不能有负环
+
+
+//松弛操作：
+//通过边和点去检查是否更新更小的dist
+//dist[son]=min(dist[father]+wight)
+
+
 const int MAXN = 2e3;
 const int MAXM = 3e3;
 const int INF = 1e9;
@@ -50,41 +62,4 @@ int SPFA(int start, int n) {
         }
     }
     return 1;//成功得到结果
-}
-
-void solve() {
-    int n, m;
-    cin >> n >> m;
-    idx=0;
-    fill(head, head + n + 1, 0);
-    fill(vis, vis + n + 1, false);
-    fill(dist, dist + n + 1, INF);
-    fill(roundCnt, roundCnt + n + 1, 0);
-    for (int i = 1;i <= m;i++) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        if (w >= 0) {
-            addEdge(u, v, w);
-            addEdge(v, u, w);
-        }
-        else {
-            addEdge(u, v, w);
-        }
-    }
-    if (SPFA(1, n) != -1)cout << "NO" << '\n';
-    else cout << "YES" << '\n';
-
-}
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    int t;
-    cin >> t;
-    while (t--) {
-        solve();
-    }
-
-    return 0;
 }

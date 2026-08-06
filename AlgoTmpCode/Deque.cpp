@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
-
 using ll = long long;
 
 int a[500000];
@@ -13,7 +12,7 @@ void randomArray(int n, int* arr) {
     }
 }
 
-void solve() {
+void prove() {
     int n = 1000;
     randomArray(n, a);
     deque<int>q;//单调队列维护区间最大值
@@ -37,14 +36,4 @@ void solve() {
             cout << l << "---" << r << ' ' << a[q.front()] << '\n';
         }
     }
-}
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-
-    solve();
-
-    return 0;
 }

@@ -3,8 +3,32 @@ using namespace std;
 using ll = long long;
 using ld = double;
 //高斯消元法求解方程组
-//逆元的线性递归
+
+//高斯消元法
+//复杂度O(n^3)
+//重要性质:
+//存在自由元,值!=0矛盾无解
+//存在自由元,值==0多解
+//不存在自由元,全是主元,唯一解
+//主元只可以依赖自由元，自由元不依赖任何其他元
+//线性，异或，同余方程组都是如此
+
+//线性方程组
+//模板例题:https://www.luogu.com.cn/problem/P3389
+//solve01();
+
+//异或方程组
+//模板例题:https://www.luogu.com.cn/problem/P2447
+//solve02();
+
+//同余方程组
+//模板例题:https://acm.hdu.edu.cn/showproblem.php?pid=5755#top
+//solve03();
+
+
 ll inv[3000001];
+
+//逆元的线性递推
 void initial_inv(ll n, ll p) {
     inv[0] = 0;
     inv[1] = 1;
@@ -23,6 +47,7 @@ ll gcd(ll a, ll b) {
     return a;
 }
 
+//普通线性方程组
 class gauss_linear {
 private:
 
@@ -311,31 +336,4 @@ void solve03() {
         gauss_mod g3;
         g3.solve(n, m);
     }
-}
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    //高斯消元法
-    //复杂度O(n^3)
-    //重要性质:
-    //存在自由元,值!=0矛盾无解
-    //存在自由元,值==0多解
-    //不存在自由元,全是主元,唯一解
-    //主元只可以依赖自由元，自由元不依赖任何其他元
-    //线性，异或，同余方程组都是如此
-
-    //线性方程组
-    //模板例题:https://www.luogu.com.cn/problem/P3389
-    //solve01();
-
-    //异或方程组
-    //模板例题:https://www.luogu.com.cn/problem/P2447
-    //solve02();
-
-    //同余方程组
-    //模板例题:https://acm.hdu.edu.cn/showproblem.php?pid=5755#top
-    //solve03();
-    return 0;
 }

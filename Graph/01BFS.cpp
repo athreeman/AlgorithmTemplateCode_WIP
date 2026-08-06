@@ -1,17 +1,19 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+//01bfs处理边权(耗费)全是0或1的图
+//求原点到任意点的最短距离
+//bfs+双端队列求解
+
+
+//流程：入队,遍历儿子
+//若dist[son]>dist[father]+w,更新
+//dist[son]=dist[father]+w
+//w==0,入队头
+//w==1,入队尾
+
+
 class Tmp {
-    //01bfs处理边权(耗费)全是0或1的图
-    //求原点到任意点的最短距离
-    //bfs+双端队列求解
-
-
-    //流程：入队,遍历儿子
-    //若dist[son]>dist[father]+w,更新
-    //dist[son]=dist[father]+w
-    //w==0,入队头
-    //w==1,入队尾
 
 private:
 

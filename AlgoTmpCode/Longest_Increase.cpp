@@ -51,11 +51,3 @@ void Prove() {
     int arr[11] = { 0,1,4,5,2,6,2,4,1,2,2 };
     cout << LIS(10, arr) << '\n';
 }
-
-int main() {
-    using namespace std;
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    return 0;
-}

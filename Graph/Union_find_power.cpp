@@ -2,6 +2,11 @@
 using namespace std;
 using ll=long long;
 
+//除了维护联通量
+//额外维护了根节点和相对节点的其他信息
+
+
+
 //例题：https://www.luogu.com.cn/problem/P8779
 //例题2：https://ac.nowcoder.com/acm/contest/133876/C
 
@@ -176,17 +181,3 @@ class solution_question02{
     }
 
 };
-
-
-
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    solution_question01 q1;
-    solution_question02 q2;
-    q1.solve();
-    //q2.solve();
-    return 0;
-}
