@@ -7,6 +7,8 @@ int dist[MAXN+1][MAXN+1];
 for(int bridge=1;bridge<=n;bridge++){
   for(int i=1;i<=n;i++){
     for(int j=1;j<=n;j++){
+      //不存在路,非法
+      if(dist[i][bridge]==INF||dist[bridge][j]==INF)continue;
       dist[i][j]=min(dist[i][j],dist[i][bridge]+dist[bridge][j]);
     }
   }
