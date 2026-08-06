@@ -4,6 +4,10 @@ using namespace std;
 using ll = long long;
 const int MAXN = 2e5;
 
+//手写堆可以通过反向索引优化
+//实现非头部数据的修改删除操作
+//详见PrimMst算法的优化结合
+
 //自底向顶建堆的优点在于离线操作建队的复杂度从O(nlogn)->O(n)
 //动态插入的操作依旧是O(logn)
 
