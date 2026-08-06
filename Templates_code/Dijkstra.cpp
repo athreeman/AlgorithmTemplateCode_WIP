@@ -10,6 +10,12 @@ using namespace std;
 //O((n+m)logn)
 //未优化时间复杂度:O(mlogm)
 
+//Djk和Bfs的差别
+//Djk在弹出时标记
+//普通bfs在入队时标记
+//原因在于bfs的所有边权相同,逐层遍历更早抵达的一定更优
+//而复杂的图需要用Djk在弹出时标记,获取最优更新
+
 class Tmp {
 
 private:
