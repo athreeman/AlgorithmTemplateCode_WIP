@@ -128,6 +128,7 @@ private:
                 if (vis[son]) {
                     continue;
                 }
+                //HeapInsert函数自带增添、更新选择
                 HeapInsert(heapVal + val, son);
             }
         }
