@@ -1,5 +1,6 @@
 //时间复杂度O(n^3),n是节点个数
 //枚举bridge跳板一定要在最外侧！！！
+//适用于除了有负环的任何图(即不能存在和为负数的环)
 const int MAXN=100;
 const int INF=1e9;
 int dist[MAXN+1][MAXN+1];
