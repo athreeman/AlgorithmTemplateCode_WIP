@@ -8,7 +8,7 @@ using namespace std;
 //反向索引堆优化
 //时间复杂度：点n,边m
 //O((n+m)logn)
-//未优化时间复杂度:O(mlogm)
+//未优化时间复杂度:O((n+m)logm)
 
 //Djk和Bfs的差别
 //Djk在弹出时标记
