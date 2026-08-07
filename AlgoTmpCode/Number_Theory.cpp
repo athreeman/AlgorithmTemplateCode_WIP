@@ -69,6 +69,7 @@ void initial_invN(int n) {
     }
 }
 
+//排列组合
 ll C(ll n, ll m) {
     if (m == 0 || m == n)return 1;
     else if (m<0 || m>n)return 0;
@@ -193,9 +194,8 @@ ll ff(ll n, ll l, ll k) {
 // 除了f(n*m)=f(n)*f(m)
 // 也可以是f(n*m*....*k)=f(n)*f(m)*...f(k)多个
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    return 0;
-}
+
+
+//加法运算的位本质
+//对于任意整数a, b
+//都满足a + b = a ^ b + 2(a & b)
