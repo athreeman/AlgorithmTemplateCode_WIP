@@ -11,7 +11,7 @@ private:
     //unordered_map<int,int>cnt
 public:
 
-    void 排序(int* a, int n, int maxval) {
+    void sort(int* a, int n, int maxval) {
         fill(cnt, cnt + maxval + 1, 0);
         for (int i = 1;i <= n;i++) {
             cnt[a[i]]++;
@@ -55,7 +55,7 @@ private:
     }
 
 public:
-    void 排序(int* a, int n, int base) {
+    void sort(int* a, int n, int base) {
         //合法下标1~n
         bit = GetHeightBit(a, n, base);//获取在BASE下的最高有效位
         for (int i = 1, offset = 1;i <= bit;i++, offset *= base) {
