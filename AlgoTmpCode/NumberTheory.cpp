@@ -181,6 +181,18 @@ void Chinese_Remainder_Theorem() {
 void Bézout_theorem() {
 }
 
+//b=a+k,k>=0
+//给定a和b的最低为1的位置v2
+//则满足条件的最小的k和b的求法如下
+int calCost(int a, int v2) {
+    int v = GetLowBitOne(a);
+    if (v2 == v)return 0;
+    int m = (a + (1 << v2) - 1) >> v2;
+    int b = (m & 1) ? (m << v2) : ((m + 1) << v2);
+    return b - a;
+}
+
+
 //小结论
 ll ff(ll n, ll l, ll k) {
     //n个元素(数量不限),要求用n个元素凑出长度=l的数组
