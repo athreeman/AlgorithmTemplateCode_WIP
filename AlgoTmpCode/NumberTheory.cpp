@@ -39,6 +39,16 @@ ll inv_(ll a, ll p) {
     return pw(a, p - 2);
 }
 
+//暴力求逆元
+//只需满足gcd(a,mod)=1即可
+ll inv02_(ll a, ll mod) {
+    a %= mod;
+    for (ll t = 1; t < mod; t++) {
+        if ((a * t) % mod == 1) return t;
+    }
+    return 1;
+}
+
 //逆元的线性递归
 //例题：https://www.luogu.com.cn/problem/P3811
 ll inv[3000001];
