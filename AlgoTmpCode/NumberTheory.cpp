@@ -181,14 +181,13 @@ void Chinese_Remainder_Theorem() {
 void Bézout_theorem() {
 }
 
-//b=a+k,k>=0
-//给定a和b的最低为1的位置v2
-//则满足条件的最小的k和b的求法如下
-int calCost(int a, int v2) {
+//找到最小的非负整数k,使得a+k的最低位1>=minV
+int calCost(int a, int minV) {
     int v = GetLowBitOne(a);
-    if (v2 == v)return 0;
-    int m = (a + (1 << v2) - 1) >> v2;
-    int b = (m & 1) ? (m << v2) : ((m + 1) << v2);
+    if (v >= minV) return 0;
+    int pow2 = 1 << minV;
+    int m = (a + pow2 - 1) >> minV;
+    int b = m << minV;
     return b - a;
 }
 
