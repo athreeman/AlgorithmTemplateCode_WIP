@@ -220,3 +220,7 @@ ll ff(ll n, ll l, ll k) {
 //加法运算的位本质
 //对于任意整数a, b
 //都满足a + b = a ^ b + 2(a & b)
+
+
+//快速提取x最右侧的1
+//lowBitOne=x&(-x)
