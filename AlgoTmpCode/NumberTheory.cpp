@@ -202,6 +202,10 @@ ll ff(ll n, ll l, ll k) {
     return N[n] * pw(n - k, l - k) % mod * inv_(N[n - k], mod);
 }
 
+//用给定位状态status的1位组成的集合(即status位状态的所有子集)
+//循环遍历
+//for(int i=status;i>0;i=(i-1)&status){cout<<i;...};
+
 
 //强哥德巴赫猜想:任意大于2的偶数都可以表示成两个质数之和,该猜想对于[1,1e9]内的整数已证明满足
 
