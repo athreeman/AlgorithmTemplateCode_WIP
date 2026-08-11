@@ -203,7 +203,7 @@ ll ff(ll n, ll l, ll k) {
 }
 
 //用给定位状态status的1位组成的集合(即status位状态的所有子集)
-//循环遍历
+//循环遍历,该方法的遍历保证严格下降不重复
 for(int i=status;i>0;i=(i-1)&status){
     cout<<i<<' ';
 }
