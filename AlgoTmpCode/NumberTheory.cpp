@@ -222,5 +222,5 @@ ll ff(ll n, ll l, ll k) {
 //都满足a + b = a ^ b + 2(a & b)
 
 
-//快速提取x最右侧的1
-//lowBitOne=x&(-x)
+//快速提取x最右侧的1(x!=0)
+//ll lowBitOne=x&(-x)
