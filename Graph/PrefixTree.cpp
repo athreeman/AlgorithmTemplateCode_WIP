@@ -64,7 +64,7 @@ void erase(string word) {
     for (int i = 0;i < word.size();i++) {
         int path = word[i] - 'a';
         if (--pass[tree[cur][path]] == 0) {
-            //全部删除完毕,清楚节点编号
+            //全部删除完毕,清除节点编号
             tree[cur][path] = 0;
             return;
         }
