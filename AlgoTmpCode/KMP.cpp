@@ -26,44 +26,44 @@ private:
 
     vector<int> kmp(string s, string t) {
         vector<int>res;
-        int i = 0, j = 0;// i是s的指针,j是t的指针
+        int x = 0, y = 0;// x是s的指针,y是t的指针
         int n = s.size(), m = t.size();
-        while (i < n) {
-            if (s[i] == t[j]) {
-                i++, j++;// 配对成功
+        while (x < n) {
+            if (s[x] == t[y]) {
+                x++, y++;// 配对成功
             }
-            else if (j == 0) {
-                i++;// j指向t开头
+            else if (y == 0) {
+                x++;// y指向t开头
             }
             else {// j跳跃
-                j = nxt[j];
+                y = nxt[y];
             }
-            if (j == m) {// 满足
-                res.push_back(i - j);
-                j = nxt[j];
+            if (y == m) {// 满足
+                res.push_back(x - y);
+                y = nxt[y];
             }
         }
         return res;
     }
 
-    void nextArr(string t) {
-        int m = t.size();
+    void nextArr(string s) {
+        int n = s.size();
         nxt[0] = -1;
         nxt[1] = 0;
-        if (m == 1) {
+        if (n == 1) {
             return;
         }
         int i = 2;
-        int l = 0;// 左侧字符匹配位置
-        while (i <= m) {
+        int cn = 0;// 左侧字符匹配位置
+        while (i <= n) {
             // 配对时不包含当前位置
-            if (t[i - 1] == t[l]) {
-                nxt[i++] = ++l;
+            if (s[i - 1] == s[cn]) {
+                nxt[i++] = ++cn;
             }
-            else if (l > 0) {
-                l = nxt[l];// 跳跃
+            else if (cn > 0) {
+                cn = nxt[cn];// 跳跃
             }
-            else {// l == 0
+            else {// cn == 0
                 nxt[i++] = 0;
             }
         }
