@@ -68,6 +68,4 @@ private:
             }
         }
     }
-public:
-    void solve() {}
 };
