@@ -15,6 +15,8 @@ using ll = long long;
 // 函数调用顺序 :
 // insert->setFail->Get/buildTree(此二者无所谓)->f
 // 模板例题：https ://www.luogu.com.cn/problem/P5357
+// 时间复杂度：O(S+T+L)
+// S:查询字符串长度 T:目标串总长度 L:tree节点个数
 const int MAXN = 2e5;
 const int MAXS = 2e6;
 
