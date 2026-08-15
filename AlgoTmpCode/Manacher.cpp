@@ -36,6 +36,8 @@ public:
             }
             maxlen = max(maxlen, len);
             p[i] = len;
+            int st = (i - len + 1) / 2;//该子串实际映射的开头位置
+            int ed = (i + len - 2) / 2;//该子串实际映射的结尾位置
         }
         return maxlen - 1;
     }
