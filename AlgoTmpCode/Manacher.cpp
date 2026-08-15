@@ -12,7 +12,7 @@ using ll = long long;
 class Man {
 private:
     static const int MAXN = 2e5;
-    static int p[2 * MAXN + 1];
+    static int p[2 * MAXN + 2];
 public:
     int manacher(string t) {
         string s = "#";
