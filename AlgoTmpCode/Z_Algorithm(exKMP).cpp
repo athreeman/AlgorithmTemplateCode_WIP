@@ -14,8 +14,8 @@ using namespace std;
 class Z {
 private:
     static const int MAXN = 2e5;
-    static int z[MAXN + 1];
-    static int e[MAXN + 1];
+    static int z[MAXN + 2];
+    static int e[MAXN + 2];
 public:
     void zArray(string s) {
         z[0] = s.size();
