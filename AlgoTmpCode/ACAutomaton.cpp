@@ -9,6 +9,9 @@ using ll = long long;
 // 词频统计：直接遍历查询字符, 进行单点词频累加
 // 最后根据fail指针反向建图, 通过递收集子节点词频至根节点0
 
+//AC自动机可以实现除收集词频以外的功能,可根据题目定制
+//其核心是fail指针和tree直通表,类比kmp的next功能
+
 // 函数调用顺序 :
 // insert->setFail->Get/buildTree(此二者无所谓)->f
 // 模板例题：https ://www.luogu.com.cn/problem/P5357
