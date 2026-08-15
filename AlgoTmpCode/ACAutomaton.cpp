@@ -11,6 +11,7 @@ using ll = long long;
 
 //AC自动机可以实现除收集词频以外的功能,可根据题目定制
 //其核心是根据目标串建立tree直通表,然后再构建fail表
+//tree直通表,fail表的功能类比kmp的next数组
 
 // 函数调用顺序 :
 // insert->setFail->Get/buildTree(此二者无所谓)->f
