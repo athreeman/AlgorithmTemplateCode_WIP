@@ -139,26 +139,11 @@ private:
 public:
 
     void solve() {
-        int n, m;
-        cin >> n >> m;
-        init(n);
-        for (int i = 1;i <= m;i++) {
-            int u, v, z;
-            cin >> u >> v >> z;
-            addEdge(u, v, z);
-            addEdge(v, u, z);
-        }
-        ll ans = Prim(n);
-        if (ans == -1) {
-            cout << "orz" << '\n';
-        }
-        else {
-            cout << ans << '\n';
-        }
+        //略......
     }
 };
 
-class Tmp {
+class PrimNormal {
     //未优化,一般时间复杂度
     //点n,边m,O(n+m)+O(mlogm)
 private:
@@ -218,21 +203,6 @@ private:
 
 public:
     void solve() {
-        int n, m;
-        cin >> n >> m;
-        init(n);
-        for (int i = 1;i <= m;i++) {
-            int u, v, z;
-            cin >> u >> v >> z;
-            addEdge(u, v, z);
-            addEdge(v, u, z);
-        }
-        ll ans = Prim(n);
-        if (ans == -1) {
-            cout << "orz" << '\n';
-        }
-        else {
-            cout << ans << '\n';
-        }
+        //略......
     }
 };

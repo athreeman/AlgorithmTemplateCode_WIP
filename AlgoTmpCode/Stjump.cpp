@@ -6,27 +6,29 @@ const int MAXN = 2e5;
 const int MAXM = 1e9;
 int n, m, edges;
 int ans[MAXN + 1];
+
+//倍增表,倍增算法核心：
+//stjump[i][p]表示从位置i跳2的p次幂抵达的位置
+//转移方程:stjump[i][p]=stjump[stjump[i][p-1]][p-1]
+
+
 //点的编号,起始点
-struct node
-{
+struct node{
     int idx;
     int start, end;
 }line[2 * MAXN + 1];
 //倍增表
 int stjump[2 * MAXN + 1][32];
-bool cmp(node n1, node n2)
-{
+bool cmp(node n1, node n2){
     return n1.start < n2.start;
 }
-int main()
-{
+int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
     //题目链接:https://www.luogu.com.cn/problem/P4155
     cin >> n >> m;
-    for (int i = 1;i <= n;i++)
-    {
+    for (int i = 1;i <= n;i++){
         line[i].idx = i;
         cin >> line[i].start >> line[i].end;
         if (line[i].end < line[i].start)line[i].end += m;
@@ -34,8 +36,7 @@ int main()
     //根据起点排序
     sort(line + 1, line + n + 1, cmp);
     //类似二倍数组拷贝线段
-    for (int i = 1;i <= n;i++)
-    {
+    for (int i = 1;i <= n;i++){
         line[i + n].idx = line[i].idx;
         line[i + n].start = line[i].start + m;
         line[i + n].end = line[i].end + m;
@@ -43,8 +44,7 @@ int main()
     //边的个数
     edges = n * 2;
     //每个边一步的最远可达边,arrive是抵达边
-    for (int i = 1, arrive = 1;i <= edges;i++)
-    {
+    for (int i = 1, arrive = 1;i <= edges;i++){
         //起点包含且可达点合法
         while (arrive + 1 <= edges && line[arrive + 1].start <= line[i].end)arrive++;
         stjump[i][0] = arrive;
@@ -52,21 +52,17 @@ int main()
     }
     int power = log2(n);//最大2的power次幂
     //获取所有边跳2^(0~power)次幂步的最远可达边
-    for (int p = 1;p <= power;p++)
-    {
-        for (int i = 1;i <= edges;i++)
-        {
+    for (int p = 1;p <= power;p++){
+        for (int i = 1;i <= edges;i++){
             stjump[i][p] = stjump[stjump[i][p - 1]][p - 1];
         }
     }
     //处理,必须包含线段i的最短路
-    for (int i = 1;i <= n;i++)
-    {
+    for (int i = 1;i <= n;i++){
         int steps = 0;
         int aim = line[i].start + m;
         int cur = i;//cur是当前所在的边的编号
-        for (int p = power;p >= 0;p--)
-        {
+        for (int p = power;p >= 0;p--){
             int nxt = stjump[cur][p];//跳到的下一个边
             if (nxt != 0 && line[nxt].end < aim)
             {

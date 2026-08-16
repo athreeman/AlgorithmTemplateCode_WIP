@@ -4,14 +4,14 @@ using namespace std;
 using ll = long long;
 const int MAXN = 2e5;
 
-//手写堆可以通过反向索引优化
-//实现非头部数据的修改删除操作
-//详见PrimMst算法的优化结合
+// 手写堆可以通过反向索引优化
+// 实现非头部数据的修改删除操作
+/ /详见PrimMst算法的优化结合
 
-//自底向顶建堆的优点在于离线操作建队的复杂度从O(nlogn)->O(n)
-//动态插入的操作依旧是O(logn)
+// 自底向顶建堆的优点在于离线操作建队的复杂度从O(nlogn)->O(n)
+// 动态插入的操作依旧是O(logn)
 
-//堆的结构基于二叉树,如下
+// 堆的结构基于二叉树,如下
 //      0
 //     1 2
 //   3 4  5 6
@@ -29,8 +29,6 @@ public:
         heap[cur] = val;
         //当前节点cur,父节点(cur-1)>>1
         while (cur > 0 && heap[cur] > heap[(cur - 1) >> 1]) {
-            //小根堆,只需修改符号
-            //while(cur>0&&heap[cur]<heap[(cur-1)>>1])
             swap(heap[cur], heap[(cur - 1) >> 1]);
             cur = (cur - 1) >> 1;
         }
@@ -41,7 +39,6 @@ public:
         int l = 2 * i + 1;
         while (l < siz) {
             //大根堆,和左右孩子数值最大的交换,且必须大于当前节点值
-            //小根堆修改符号即可
             int best = l + 1 < siz && heap[l + 1] > heap[l] ? l + 1 : l;
             if (heap[best] <= heap[i])return;
             swap(heap[i], heap[best]);
@@ -52,7 +49,6 @@ public:
 
     void siftUp(int i) {//大值上传
         while (i > 0 && heap[(i - 1) / 2] < heap[i]) {
-            //小根堆修改符号即可
             swap(heap[i], heap[(i - 1) / 2]);
             i = (i - 1) / 2;
         }

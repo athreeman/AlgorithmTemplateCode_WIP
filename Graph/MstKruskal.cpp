@@ -50,47 +50,9 @@ bool merge(int u, int v) {
 }
 
 void initial(int n) {
-    for (int i = 0;i <= n;i++) {
-        father[i] = i;
-        siz[i] = 1;
-    }
+    //略......
 }
 
 bool cmp(array<int, 3>a, array<int, 3>b) {
     return a[2] < b[2];
-}
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    int n, m;
-    cin >> n >> m;
-    initial(n);
-    for (int i = 1;i <= m;i++) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        edge[i][0] = u;
-        edge[i][1] = v;
-        edge[i][2] = w;
-    }
-    sort(edge + 1, edge + m + 1, cmp);
-    ll ans = 0;
-    ll cnt = 0;
-    for (int i = 1;i <= m;i++) {
-        int u = edge[i][0], v = edge[i][1];
-        ll w = edge[i][2];
-        if (merge(u, v)) {
-            ans += w;
-            cnt++;
-        }
-        if (cnt == n - 1)break;
-    }
-    if (cnt == n - 1) {
-        cout << ans << '\n';
-    }
-    else {
-        cout << "orz" << '\n';
-    }
-    return 0;
 }

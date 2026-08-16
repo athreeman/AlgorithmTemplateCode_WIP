@@ -1,7 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
-
-
 //计数排序,时间复杂度和空间复杂度O(n)
 //对数据的范围有严格要求
 class CountSort {
@@ -34,6 +32,7 @@ private:
     int help[MAXN + 1];//辅助数组
     int bit = 0;
     int GetHeightBit(int* a, int n, int base) {
+        
         //获取最高位
         int maxval = 0;
         int ans = 0;
@@ -59,15 +58,18 @@ public:
         //合法下标1~n
         bit = GetHeightBit(a, n, base);//获取在BASE下的最高有效位
         for (int i = 1, offset = 1;i <= bit;i++, offset *= base) {
+
             //依次处理每一位
             vector<int>cnt(base, 0);//0~base-1
             for (int i = 1;i <= n;i++) {
                 cnt[(a[i] / offset) % base]++;
             }
+
             //base进制意义下的前缀和
             for (int i = 1;i < base;i++) {
                 cnt[i] += cnt[i - 1];
             }
+
             //排序
             for (int i = n;i >= 1;i--) {
                 help[cnt[(a[i] / offset) % base]--] = a[i];

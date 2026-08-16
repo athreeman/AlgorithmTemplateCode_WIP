@@ -89,49 +89,33 @@ ll C(ll n, ll m) {
 
 //同余原理
 void Properties_of_Congruence() {
-    ll a, b;
-    cin >> a >> b;
+    // 加法
+    // (a%m+b%m)%m=(a+b)%m
 
-    //加法
-    //(a%m+b%m)%m=(a+b)%m
-    cout << (a % mod + b % mod) % mod << ' ';
-    cout << (a + b) % mod << '\n';
+    // 乘法
+    // (a%m*b%m)%m=(a*b)%mod
+    // -a%mod=(-a%mod+mod)%mod=(mod-a)%mod
+    // 例,-3%7=(-3%7+7)%7=4%7
 
-    //乘法
-    //(a%m*b%m)%m=(a*b)%mod
-    //-a%mod=(-a%mod+mod)%mod=(mod-a)%mod
-    //例,-3%7=(-3%7+7)%7=4%7
-    cout << (a % mod * b % mod) % mod << ' ';
-    cout << (a * b) % mod << '\n';
+    // 减法
+    // (a-b)%mod=(a%mod-b%mod+mod)%mod
+    // +mod解决负数的问题
 
-    //减法
-    //(a-b)%mod=(a%mod-b%mod+mod)%mod
-    //+mod解决负数的问题
-    cout << (a - b + mod) % mod << ' ';
-    cout << (a % mod - b % mod + mod) % mod << '\n';
+    // 除法,逆元
+    // a/b%mod应该写为a*inv(b)%mod的形式
 
-    //除法,逆元
-    //a/b%mod应该写为a*inv(b)%mod的形式
-    cout << a * inv_(b, mod) % mod << '\n';
+    // 若(a+b)%mod=0
+    // 给定a,则b%mod=(mod-a%mod)%mod
+    // (x+y)%17=0
 
-    //若(a+b)%mod=0
-    //给定a,则b%mod=(mod-a%mod)%mod
-    //(x+y)%17=0
-    int x=3;
-    int mod=17;
-    int ymod=(mod-x%mod)%mod;
+    // (a+b)%mod==j
+    // 给定a,b%mod=((j-a)%mod+mod)%mod
+    // (c+d)%17=11
 
-    //(a+b)%mod==j
-    //给定a,b%mod=((j-a)%mod+mod)%mod
-    //(c+d)%17=11
-    int c=5;
-    int r=11;
-    mod=17;
-    int dmod=((r-c)%mod+mod)%mod;
 }
 
 //2的幂快速判断
-void isPw2(int n) {
+void isPwTwo(int n) {
     //若x>0,x&(~x+1)==x则x是2的幂
     //~x+1=-x
     if (n == 0) {
@@ -194,28 +178,28 @@ int calCost(int a, int minV) {
 
 //小结论
 ll ff(ll n, ll l, ll k) {
-    //n个元素(数量不限),要求用n个元素凑出长度=l的数组
-    //两个相同元素之间的间隔要>=k
-    //0<=k<n<=l
-    //可能的方案数=n!*(n-k)^(l-k)/(n-k)!
-    //n-k的l-k次幂
+    // n个元素(数量不限),要求用n个元素凑出长度=l的数组
+    // 两个相同元素之间的间隔要>=k
+    // 0<=k<n<=l
+    // 可能的方案数=n!*(n-k)^(l-k)/(n-k)!
+    // n-k的l-k次幂
     return N[n] * pw(n - k, l - k) % mod * inv_(N[n - k], mod);
 }
 
-//用给定位状态status的1位组成的集合(即status位状态的所有子集)
-//循环遍历,该方法的遍历保证严格下降不重复
+// 用给定位状态status的1位组成的集合(即status位状态的所有子集)
+// 循环遍历,该方法的遍历保证严格下降不重复
 for(int i=status;i>0;i=(i-1)&status){
     cout<<i<<' ';
 }
 
-//m=[0,n]
-//求和C(n,m)*2^m=3^n
-//C(n,0)*2^0+C(n,1)*2^1+...+C(n,m)*2^m+...+C(n,n)*2^n=3^n
+// m=[0,n]
+// 求和C(n,m)*2^m=3^n
+// C(n,0)*2^0+C(n,1)*2^1+...+C(n,m)*2^m+...+C(n,n)*2^n=3^n
 
-//强哥德巴赫猜想:任意大于2的偶数都可以表示成两个质数之和,该猜想对于[1,1e9]内的整数已证明满足
+// 强哥德巴赫猜想:任意大于2的偶数都可以表示成两个质数之和,该猜想对于[1,1e9]内的整数已证明满足
 
-//弱哥德巴赫猜想(此猜想已被彻底证明成立):任一大于5的奇数都可以表示成三个质数之和
-//其中若n&1且n-2是质数则最少可以拆为2个
+// 弱哥德巴赫猜想(此猜想已被彻底证明成立):任一大于5的奇数都可以表示成三个质数之和
+// 其中若n&1且n-2是质数则最少可以拆为2个
 
 // 函数f(n),n>=1
 // 积性函数：f(1)=1且对于gcd(m,n)=1,存在f(m*n)=f(n)*f(m)
@@ -224,12 +208,9 @@ for(int i=status;i>0;i=(i-1)&status){
 // 除了f(n*m)=f(n)*f(m)
 // 也可以是f(n*m*....*k)=f(n)*f(m)*...f(k)多个
 
+// 加法运算的位本质
+// 对于任意整数a, b
+// 都满足a + b = a ^ b + 2(a & b)
 
-
-//加法运算的位本质
-//对于任意整数a, b
-//都满足a + b = a ^ b + 2(a & b)
-
-
-//快速提取x最右侧的1(x!=0)
-//ll lowBitOne=x&(-x)
+// 快速提取x最右侧的1(x!=0)
+// ll lowBitOne=x&(-x)

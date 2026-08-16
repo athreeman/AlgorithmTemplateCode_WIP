@@ -68,7 +68,6 @@ bool witness(ll a, ll n) {
 //MR_p测试数组
 ll MR_p[] = { 2,3,5,7,11,13,17,19,23,29,31,37 };
 bool Miller_Rabin(ll n) {
-    //模板例题：https://www.luogu.com.cn/problem/U148828
     //判断x是否为质数
     if (n <= 2) {
         return n == 2;

@@ -12,7 +12,7 @@ using namespace std;
 //核心：保留原数据,拷贝新节点,范围新编号,获取不同版本
 //功能：查询第k小，维护前缀信息，单点和范围查询
 
-class question01 {
+class Single_AND_Single {
 
     // 例题1题解代码：
     // 模板例题1：https://www.luogu.com.cn/problem/P3919 单点修改+单点查询(不同版本单点值)
@@ -119,7 +119,7 @@ public:
 
 };
 
-class question02 {
+class SarchRankMin {
     // 模板例题2：https://www.luogu.com.cn/problem/P3834 单点修改+范围查询(区间第k小,线段树维护前缀信息)
 
 private:
@@ -233,7 +233,7 @@ public:
 
 };
 
-class question03 {
+class Range_AND_Lazy {
 
     // 模板例题3：https://www.luogu.com.cn/problem/SP11470 区间修改+范围查询(懒标记)
 private:
@@ -377,7 +377,7 @@ public:
 
 };
 
-class question04 {
+class Range_AND_Persistent {
 
     // 模板例题4：https://www.luogu.com.cn/problem/P3372 区间修改+区间查询+标记永久化(普通线段树的标记永久化)
 

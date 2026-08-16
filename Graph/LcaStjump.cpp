@@ -135,29 +135,8 @@ int LCA(int a, int b)
     }
     return stjump[a][0];
 }
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+int main(){
+    //输入,略......
     //题目链接:https://www.luogu.com.cn/problem/P3379
-    cin >> n >> q >> root;
-    depth[0] = 0;
-    //无向图
-    for (int i = 1;i <= n - 1;i++)
-    {
-        int u, v;
-        cin >> u >> v;
-        add_edge(u, v);
-        add_edge(v, u);
-    }
-    //dfs(root,0);
-    dfs_sta(root);
-    while (q--)
-    {
-        int a, b;
-        cin >> a >> b;
-        cout << LCA(a, b) << '\n';
-    }
     return 0;
 }

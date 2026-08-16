@@ -3,10 +3,7 @@
 using ll=long long;
 using std::fill;
 const int MAXN=5e5+5;
-
-//模板例题：https://www.luogu.com.cn/problem/P3379
 //迭代版本
-
 int ans[MAXN];
 
 //链式前向星
@@ -123,31 +120,8 @@ void build(int n){
 }
 
 int main(){
-
-    using namespace std;
-
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    int n,m,s;
-    cin>>n>>m>>s;
-    build(n);
-    for(int i=1;i<n;i++){
-        int u,v;
-        cin>>u>>v;
-        add_edge(u,v);
-        add_edge(v,u);
-    }
-    for(int i=1;i<=m;i++){
-        int u,v;
-        cin>>u>>v;
-        add_query(u,v,i);
-        add_query(v,u,i);
-    }
-    Tarjan(s);
-    for(int i=1;i<=m;i++){
-        cout<<ans[i]<<'\n';
-    }
+    //模板例题：https://www.luogu.com.cn/problem/P3379
+    //输入,略......
 
     return 0;
 }

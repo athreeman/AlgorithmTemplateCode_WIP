@@ -139,33 +139,9 @@ private:
             }
         }
     }
-
 public:
-
     //模板例题：https://www.luogu.com.cn/problem/P4779
     void solve() {
-        int n, m, s;
-        cin >> n >> m >> s;
-        init(n);
-        for (int i = 1;i <= m;i++) {
-            int u, v;ll w;
-            cin >> u >> v >> w;
-            addEdge(u, v, w);
-        }
-        Djk(s);
-        for (int i = 1;i <= n;i++) {
-            cout << dist[i] << ' ';
-        }
+        //输入,略......
     }
-
 };
-
-
-int main() {
-
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-
-    return 0;
-}

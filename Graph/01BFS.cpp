@@ -5,13 +5,11 @@ using namespace std;
 //求原点到任意点的最短距离
 //bfs+双端队列求解
 
-
-//流程：入队,遍历儿子
+//流程(核心)：入队,遍历儿子
 //若dist[son]>dist[father]+w,更新
 //dist[son]=dist[father]+w
 //w==0,入队头
 //w==1,入队尾
-
 
 class Tmp {
 
@@ -58,38 +56,13 @@ private:
     }
 
     void init(int n, int m) {
-        //初始化
-        for (int i = 1;i <= n;i++) {
-            fill(dist[i], dist[i] + m + 1, INF);
-        }
+        //初始化....略......
     }
 
 public:
-
     //模板例题：https://www.luogu.com.cn/problem/P4554
-
     void solve() {
-        int n, m;
-        cin >> n >> m;
-        init(n, m);
-        for (int i = 1;i <= n;i++) {
-            for (int j = 1;j <= m;j++) {
-                cin >> mat[i][j];
-            }
-        }
-        int rx, ry, tx, ty;
-        cin >> rx >> ry >> tx >> ty;
-        bfs(rx, ry, n, m);
-        cout << dist[tx][ty] << '\n';
+        //输入,略......
     }
 
 };
-
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-
-    return 0;
-}

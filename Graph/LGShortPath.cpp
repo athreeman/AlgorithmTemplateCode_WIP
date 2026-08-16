@@ -134,31 +134,5 @@ public:
 
     //模板例题：https://www.luogu.com.cn/problem/P4568
     void solve() {
-        int n, m, k;
-        cin >> n >> m >> k;
-
-        for (int i = 1;i <= n;i++) {
-            fill(f[i], f[i] + 11, -1);
-        }
-
-        int st, ed;
-        cin >> st >> ed;
-        for (int i = 1;i <= m;i++) {
-            int u, v;
-            int w;
-            cin >> u >> v >> w;
-            addEdge(u + 1, v + 1, w);
-            addEdge(v + 1, u + 1, w);
-        }
-        cout << Djk(st + 1, ed + 1, k);
-    }
+    //略...... 
 };
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-
-
-    return 0;
-}

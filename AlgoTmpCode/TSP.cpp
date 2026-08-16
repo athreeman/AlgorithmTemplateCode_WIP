@@ -2,13 +2,17 @@
 using namespace std;
 using ll = long long;
 const int MAXN = 20;
+
+
+// 核心：状态压缩
+// f(status,i)表示从处于status状态且村庄i最后抵达的最短路
+// 枚举下一个抵达的村庄j
+// dp[s][i]=min(dp[s|(1<<j)][j]+dist[i][j])
+
 ll dist[MAXN + 1][MAXN + 1];
 ll dp[1 << MAXN][MAXN + 1];
 ll solve() {
     //模板例题:https://www.luogu.com.cn/problem/P1171
-    //f(status,i)表示从处于status状态且村庄i最后抵达的最短路
-    //枚举下一个抵达的村庄j
-    //dp[s][i]=min(dp[s|(1<<j)][j]+dist[i][j])
     int n;
     cin >> n;
     memset(dp, 0x7f7f7f7f7f7f7f7f, sizeof(dp));

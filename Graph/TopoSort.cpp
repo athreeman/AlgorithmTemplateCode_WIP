@@ -16,6 +16,7 @@ using namespace name;
 //拓扑排序可以用于环的查询
 //拓扑排序操作完成后
 //剩余的度数>0的点,就是环上点
+//核心代码,bfs时只有入度=0时才入队
 
 class Tmp {
 private:
@@ -58,6 +59,7 @@ private:
             rank[++cnt] = cur;
             for (int edge = head[cur];edge > 0;edge = next[edge]) {
                 int son = to[edge];
+                //核心代码,当入度=0时入队
                 if (--indegree[son] == 0) {
                     q.push(son);
                 }

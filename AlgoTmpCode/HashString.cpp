@@ -7,7 +7,6 @@ class HashString {
     //字符串哈希需要选定base进制
     //如：433,499,599,1e9+7,31,131,1313,13131,131313
     //字符的赋值ch->正整数(不要取!0!),可定制
-    //模板例题：https://www.luogu.com.cn/problem/P3370
 private:
     using ll = long long;
     using ull = unsigned long long;
