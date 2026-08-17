@@ -23,8 +23,8 @@ private:
         }
     }
 
-    //普通求和
-    int sumSingle(int i) {
+    //普通求和[1...i]
+    int sum(int i) {
         int ans = 0;
         while (i > 0) {
             ans += tree[i];
@@ -33,7 +33,7 @@ private:
         return ans;
     }
     //区间查询
-    int query(int l, int r) {
+    int queryRange(int l, int r) {
         return sumSingle(r) - sumSingle(l - 1);
     }
 };
