@@ -34,7 +34,7 @@ private:
     }
     //区间查询
     int queryRange(int l, int r) {
-        return sumSingle(r) - sumSingle(l - 1);
+        return sum(r) - sum(l - 1);
     }
 };
 
