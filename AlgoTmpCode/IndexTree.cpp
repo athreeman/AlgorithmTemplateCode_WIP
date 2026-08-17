@@ -84,7 +84,7 @@ class Range_AND_Range {
             i += lowbit(i);
         }
     }
-    //树tree区间和
+    //树tree区间和[1...i]
     int sum(int* tree, int i) {
         //1...i
         int ans = 0;
@@ -94,7 +94,7 @@ class Range_AND_Range {
         }
         return ans;
     }
-    //区间增加
+    //tree区间修改
     void addRange(int n, int l, int r, int v) {
         add(n, tree1, l, v);
         add(n, tree1, r + 1, -v);
