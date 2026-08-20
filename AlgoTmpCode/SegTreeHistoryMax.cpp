@@ -14,7 +14,7 @@ struct {
     // cnt           最大值个数
     // cmax          次最大值
     // maxHistory    历史最大值
-    // 一下属于懒信息标记内容：
+    // 以下属于懒信息标记内容：
     // maxAdd        最大值增幅(当前)
     // otherAdd      其他值增幅(当前)
     // maxAddTop     最大值的历史最大增幅
