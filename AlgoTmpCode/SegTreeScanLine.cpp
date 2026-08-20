@@ -59,7 +59,7 @@ void Disc() {
             fy[++m] = fy[i];
         }
     }
-    fy[++m] = fy[m - 1];
+    fy[m + 1] = fy[m];
 }
 
 int rankk(int* disc, int n, int v) {
