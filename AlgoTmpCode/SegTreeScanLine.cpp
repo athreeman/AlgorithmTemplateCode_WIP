@@ -80,6 +80,7 @@ int rankk(int* disc, int n, int v) {
 }
 
 bool cmp(array<int, 4>a, array<int, 4>b) {
+    if (a[0] == b[0])return a[3] > b[3];//处理坐标相同问题
     return a[0] < b[0];
 }
 void solve() {
