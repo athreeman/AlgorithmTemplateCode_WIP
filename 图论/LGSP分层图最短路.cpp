@@ -135,4 +135,5 @@ public:
     //模板例题：https://www.luogu.com.cn/problem/P4568
     void solve() {
     //略...... 
+    }
 };
