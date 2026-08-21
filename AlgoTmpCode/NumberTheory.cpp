@@ -192,6 +192,10 @@ for(int i=status;i>0;i=(i-1)&status){
     cout<<i<<' ';
 }
 
+
+//对于任意正整数a<b
+//若a%m=b%m,则(b-a)%m=0
+
 //最大公约数相关
 //任意正整数a<b
 //都有gcd(a,b)=gcd(a,b-a)
