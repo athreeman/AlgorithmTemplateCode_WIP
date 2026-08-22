@@ -14,16 +14,18 @@ void prove() {
             l++;
         }
 
+        //维护右侧最大候选值
+        //注意：某些题目可能因为维护信息的原因，必须先放入新端点r，否则会出错
+        while (q.size() && a[q.back()] < a[r]) {
+            q.pop_back();
+        }
+        q.push_back(r);//新节点入队
+
         //维护左侧合法下标
         while (q.size() && q.front() < l) {
             q.pop_front();
         }
 
-        //维护右侧最大候选值
-        while (q.size() && a[q.back()] < a[r]) {
-            q.pop_back();
-        }
-        q.push_back(r);//新节点入队
 
         //输出区间最大值
         //加上如下限定,区间长度严格=len,否则<=len
