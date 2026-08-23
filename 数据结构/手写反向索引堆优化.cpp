@@ -4,7 +4,8 @@ using ll = long long;
 
 //通过建立映射数组f[val]=i
 //获取值val在对内的映射位置i
-//如下模板代码维护小根堆
+//如下模板代码维护小根堆，且仅在插入值不存在或更小时执行操作
+//若需要普遍性更新，需要在变大时执行siftDown操作
 const int MAXN = 2e5;
 int f[MAXN + 1];//堆的反向索引表,点i在堆中的位置
 pair<ll, int> heap[MAXN + 1];//堆:{值,点}
