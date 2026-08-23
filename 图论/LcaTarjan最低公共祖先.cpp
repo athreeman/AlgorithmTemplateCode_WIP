@@ -32,6 +32,8 @@ void tarjan(int cur, int father) {
     for (int edge = head[cur];edge > 0;edge = nxt[edge]) {
         if (to[edge] != father) {
             tarjan(to[edge], cur);
+            //！！！注意！！！
+            //！！！设置父节点必须写在子节点递归回溯后！！！
             fa[to[edge]] = cur;
         }
     }
