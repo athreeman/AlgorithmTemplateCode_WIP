@@ -1,5 +1,6 @@
-#include <bits/stdc++.h>
 namespace name {
+
+    using std::ios;
     using std::cout;
     using std::cin;
     using std::swap;
