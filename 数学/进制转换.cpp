@@ -7,8 +7,9 @@ const string DIGIT =
 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
-//该DIGIT字符最多支持94进制的转换
-//如果仅限数字和字母最多支持62进制的转换
+//该DIGIT字符最多支持95进制的转换
+//如果仅限数字和字母最多支持63进制的转换
+
 
 //把x转换为base进制
 string toBase(ll x, int base) {
@@ -23,7 +24,7 @@ string toBase(ll x, int base) {
     reverse(ans.begin(), ans.end());
     return ans;
 }
-//快速幂
+
 ll pw(ll a, ll b) {
     ll res = 1;
     while (b) {
@@ -35,8 +36,15 @@ ll pw(ll a, ll b) {
     }
     return res;
 }
+
 //获取x在base进制下的第i位
-//注意！：高进制有越界风险
-ll getNthDigit(ll x, int base, int i) {
+ll getDigit(ll x, int base, int i) {
     return x / pw(base, i) % base;
+}
+
+//basej进制下的第i位设置为v
+ll setDigit(ll s, int base, int i, int v) {
+    ll p = pw(base, i);
+    ll old = getDigit(s, base, i);
+    return s + (v - old) * p;
 }
