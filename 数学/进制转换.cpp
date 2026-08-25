@@ -45,6 +45,6 @@ ll getDigit(ll x, int base, int i) {
 //basej进制下的第i位设置为v
 ll setDigit(ll s, int base, int i, int v) {
     ll p = pw(base, i);
-    ll old = getDigit(s, base, i);
+    ll old = s / p % base;
     return s + (v - old) * p;
 }
