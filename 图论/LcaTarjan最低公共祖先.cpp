@@ -28,6 +28,7 @@ void addEdge(int u, int v) {
 }
 
 void tarjan(int cur, int father) {
+    // ！！！一旦进入，立刻标记已抵达
     vis[cur] = true;
     for (int edge = head[cur];edge > 0;edge = nxt[edge]) {
         if (to[edge] != father) {
@@ -37,6 +38,7 @@ void tarjan(int cur, int father) {
             fa[to[edge]] = cur;
         }
     }
+    // ！！！子节点遍历完，再查询答案
     int a = cur;
     for (auto& [b, i] : query[a]) {
         if (vis[b]) {
