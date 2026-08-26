@@ -10,7 +10,8 @@ const int mod = 998244353;
 
 // 矩阵快速幂解决dp
 // 核心在于把i - 1和i的严格位置依赖关系
-// 转移到矩阵中去
+// 转移到矩阵中去, 关系矩阵A
+// dp[i] = A * dp[i - 1]
 
 // 矩阵乘法：前列必须等于后行，(使用引用符号，省去拷贝的耗费)
 vector<vector<ll>> multiply(const vector<vector<ll>>& a, const vector<vector<ll>>& b) {
