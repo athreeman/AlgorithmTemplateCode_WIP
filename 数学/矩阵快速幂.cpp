@@ -1,151 +1,72 @@
 #include<bits/stdc++.h>
 using namespace std;
+using ll = long long;
+const int mod = 998244353;
 
-class Mat_pos {
-    //矩阵快速幂
-private:
-    using ll = long long;
-    const static int mod = 1e9 + 7;
+// 矩阵快速幂、矩阵乘法
+// 往往同时用于动态规划的优化
+// 矩阵快速幂时间复杂度：
+// 1维k阶，k维1阶：O(logn * k ^ 3)
 
-    //例题1数据：
-    const static int MAXN = 1000;
-    ll f[MAXN + 1] = { 0,1,2,5 };
-    vector<vector<ll>>arr = { {5,2,1} };
-    vector<vector<ll>>mat = { {2,1,0},
-                            {0,0,1},
-                            {1,0,0} };
+// 矩阵快速幂解决dp
+// 核心在于把i - 1和i的严格位置依赖关系
+// 转移到矩阵中去
 
-
-    //例题2数据：
-    const static int MAXM = 1e5;
-    const static int f01 = 3;
-    vector<vector<ll>>arr02 = { {1,1,0,1,0,0} };
-    vector<vector<ll>>mat02 = { {1,1,0,1,0,0},
-                           {1,0,1,1,0,0},
-                           {1,0,0,1,0,0},
-                           {0,0,0,1,1,0},
-                           {0,0,0,1,0,1},
-                           {0,0,0,1,0,0} };
-
-                           
-    //矩阵快速幂
-    //解决固定关系,严格应用于方阵
-    //复杂度O(log2n*k的3次幂)
-
-    //矩阵相乘
-    //二维矩阵
-    vector<vector<ll>> multiply(vector<vector<ll>>a, vector<vector<ll>>b) {
-        int n = a.size();//前行
-        int m = b[0].size();//后列
-        int k = a[0].size();//前列
-        vector<vector<ll>>ans(n, vector<ll>(m));
-        for (int i = 0;i < n;i++) {
-            for (int j = 0;j < m;j++) {
-                for (int c = 0;c < k;c++) {
-                    ans[i][j] = (ans[i][j] + (a[i][c] * b[c][j]) % mod) % mod;
-                }
+// 矩阵乘法：前列必须等于后行，(使用引用符号，省去拷贝的耗费)
+vector<vector<ll>> multiply(const vector<vector<ll>>& a, const vector<vector<ll>>& b) {
+    int n = a.size();
+    int m = b[0].size();
+    int k = a[0].size();
+    vector<vector<ll>>ans(n, vector<ll>(m, 0));
+    for (int i = 0;i < n;i++) {
+        for (int j = 0;j < m;j++) {
+            for (int c = 0;c < k;c++) {
+                ans[i][j] += a[i][c] * b[c][j];
             }
         }
-        return ans;
     }
+    return ans;
+}
 
-    //矩阵快速幂
-    vector<vector<ll>> Pow_Mat(vector<vector<ll>>m, ll p) {
-        int n = m.size();//行
-        vector<vector<ll>>ans(n, vector<ll>(n));
-        for (int i = 0;i < n;i++) {
-            ans[i][i] = 1;
-        }
-        while (p) {
-            if (p & 1) {
-                ans = multiply(ans, m);
-            }
-            m = multiply(m, m);
-            p >>= 1;
-        }
-        return ans;
+
+// 矩阵快速幂：严格用于方阵，即n * n的矩阵(n >= 1)
+// 此处不要使用引用符号，直接拷贝过来
+vector<vector<ll>> MatPow(vector<vector<ll>> a, ll b) {
+    int n = a.size();
+    vector<vector<ll>>ans(n, vector<ll>(n, 0));
+    for (int i = 0;i < n;i++) {// 主对角线必须为1，其他为0
+        ans[i][i] = 1;
     }
-
-    //f(n,h)h=0,1
-    //表示2*n的矩阵+边角1格的方案数
-    //一型即水平或竖直两格,二型即L状三格
-    int f1(int n, int h) {
-        if (n == 0) {
-            return h == 0 ? 1 : 0;
+    while (b) {
+        if (b & 1) {
+            ans = multiply(ans, a);
         }
-        if (n == 1) {
-            return 1;
-        }
-        if (h == 1) {
-            //边角分别放二型,一型
-            return f1(n - 1, 0) + f1(n - 1, 1);
-        }
-        else {
-            //边角分别放竖直一型,两个水平一型,一个二型
-            return f1(n - 1, 0) + f1(n - 2, 0) + 2 * f1(n - 2, 1);
-        }
+        a = multiply(a, a);
+        b >>= 1;
     }
+    return ans;
+}
 
-    ll num = 0;
-    void f2(int n, string s, int cntA) {
-        if (cntA >= 2)return;
-        if (n == 0) {
-            int A = 0;
-            for (int i = 0;i < s.size();i++) {
-                if (i + 2 < s.size()) {
-                    if (s[i] == 'L' && s[i + 1] == 'L' && s[i + 2] == 'L') {
-                        return;
-                    }
-                }
-                if (s[i] == 'A')A++;
-            }
-            if (A < 2) {
-                num++;
-            }
-            return;
-        }
-        f2(n - 1, s + 'A', cntA + 1);
-        f2(n - 1, s + 'L', 0);
-        f2(n - 1, s + 'P', 0);
-    }
 
-public:
+// 例题：https://ac.nowcoder.com/acm/contest/139659/F
+// 注意！：该题存在取模运算
 
-    //斐波那契数列快速幂:(1维2阶)
-    //int a[][]={{1,1},{1,0}};
-    //{f[n],f[n-1]}={{f[1],f[0]}}*Pow_Mat(a,n-1);
+// 关系映射, 行表示第i个位置, 列表示第i - 1个位置
+// 表示在第i - 1个位置处于某种状态时, 第i个位置得到某个状态的方案数
+vector<vector<ll>>A = { {1,1,0,1},
+                        {1,1,1,0},
+                        {0,1,1,1},
+                        {1,0,1,1} };
 
-    ll Mat_pow_1_k(int n) {
-        //解决1维k阶
-        //例题：https://leetcode.cn/problems/domino-and-tromino-tiling/description/
-        //暴力打表找规律,函数f1(n,0)
-        //f[i]=2*f[i-1]+f[i-3]
-        //{f[i+1],f[i],f[i-1]}={f[i],f[i-1],f[i-2]}*{{2,0,1},{1,0,0},{0,1,0}};
+// 初始单位状态
+vector<vector<ll>>v0 = { {1},
+                         {0},
+                         {0},
+                         {0} };
 
-        vector<vector<ll>>ans;
-        if (n <= 3) {
-            return f[n];
-        }
-        else {
-            ans = multiply(arr, Pow_Mat(mat, ll(n - 3)));
-        }
-        return ans[0][0];
-    }
-
-    ll Mat_pow_k_1(int n) {
-        //解决k维1阶
-        //例题：https://leetcode.cn/problems/student-attendance-record-ii/description/
-        if (n <= 1) {
-            return f01;
-        }
-        else {
-            vector<vector<ll>>ans;
-            ans = multiply(arr, Pow_Mat(mat, n - 1));
-            ll res = 0;
-            for (int i = 0;i < 6;i++) {
-                res = (res + ans[0][i]) % mod;
-            }
-            return res;
-        }
-    }
-};
+void solve() {
+    ll n, r;
+    cin >> n >> r;
+    vector<vector<ll>>ans = multiply(MatPow(A, n), v0);
+    cout << ans[r % 4][0] % mod << '\n';
+}
