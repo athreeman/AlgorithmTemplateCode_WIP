@@ -7,7 +7,13 @@ ll exgcd(ll a, ll b, ll& x, ll& y) {
         y = 0;
         return a;
     }
-    return exgcd(b, a % b, y, x);
+    else {
+        ll g = exgcd(b, a % b, x, y);
+        ll tmp = y;
+        y = x - y * (a / b);
+        x = tmp;
+        return g;
+    }
 }
 
 // 求解a在模mod意义下的逆元
