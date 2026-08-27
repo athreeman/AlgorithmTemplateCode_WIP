@@ -12,6 +12,7 @@ ll inv_(ll a, ll p) {
 
 //暴力求逆元
 //只需满足gcd(a,mod)=1即可
+//时间复杂度O(mod),建议使用扩展欧几里得算法求解
 ll inv02_(ll a, ll mod) {
     a %= mod;
     for (ll t = 1; t < mod; t++) {
