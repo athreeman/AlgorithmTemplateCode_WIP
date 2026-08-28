@@ -15,8 +15,11 @@ using ll = long long;
 
 // 扩展欧几里得算法:
 // 给定ax + by = c, c是gcd(a, b)的倍数
-// 求解x, y的一组特解
-// 真实解 = (x * k, y * k), k = c / gcd(a, b)
+// g = gcd(a, b)
+// exgcd求解x, y的一组特解x0, y0
+// 当前公式ax + by的解：(xx, yy) = (x0 * (c / d), y0 * (c / d))
+// 通解：x = x0 + (b / d) * n, y = y0 - (a / d) * n
+// 其中x的最小非负解minx = x0 * (c / d) % (b / d)
 // 时间复杂度O((logmin(a, b)) ^ 3)
 // 注意：传入的a, b不能出现负数
 ll exgcd(ll a, ll b, ll& x, ll& y) {
