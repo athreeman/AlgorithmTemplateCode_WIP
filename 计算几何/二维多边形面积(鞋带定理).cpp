@@ -29,6 +29,8 @@ ld polygonArea(const vector<point>& p) {
     ld area = 0;
     for (int i = 0; i < n; i++) {
         int j = (i + 1) % n;
+        // 顺时针：x后*y前-x前*y后
+        // 逆时针：x前*y后-x后*y前
         area += p[i].x * p[j].y - p[j].x * p[i].y;
     }
     return fabs(area) / 2.0;
