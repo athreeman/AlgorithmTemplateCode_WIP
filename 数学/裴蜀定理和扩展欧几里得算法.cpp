@@ -20,7 +20,7 @@ using ll = long long;
 // 该特解x0, y0是ax + by = gcd(a, b)时的解
 // 当前公式ax + by的解：(xx, yy) = (x0 * (c / d), y0 * (c / d))
 // 通解：x = x0 + (b / d) * n, y = y0 - (a / d) * n
-// 其中x的最小非负解minx = x0 * (c / d) % (b / d)
+// 其中x的最小非负解minx = (x0 * (c / d) % (b / d) + (b / d)) % (b / d)
 // 时间复杂度O((logmin(a, b)) ^ 3)
 // 注意：传入的a, b不能出现负数
 ll exgcd(ll a, ll b, ll& x, ll& y) {
