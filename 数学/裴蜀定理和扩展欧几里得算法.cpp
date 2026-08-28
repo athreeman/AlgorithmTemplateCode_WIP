@@ -17,6 +17,7 @@ using ll = long long;
 // 给定ax + by = c, c是gcd(a, b)的倍数
 // g = gcd(a, b)
 // exgcd求解x, y的一组特解x0, y0
+// 该特解x0, y0是ax + by = gcd(a, b)时的解
 // 当前公式ax + by的解：(xx, yy) = (x0 * (c / d), y0 * (c / d))
 // 通解：x = x0 + (b / d) * n, y = y0 - (a / d) * n
 // 其中x的最小非负解minx = x0 * (c / d) % (b / d)
