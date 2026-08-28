@@ -4,7 +4,7 @@ using ld = long double;
 using ll = long long;
 
 // 给定线段(x1, y1), (x2, y2)
-// 线段上过的格点数 = gcd(| x1 - x2 | , | y1 - y2 | )
+// 线段上经过的格点数 = gcd(| x1 - x2 | , | y1 - y2 | ) + 1
 // (包括端点)
 
 // 多边形面积：S
