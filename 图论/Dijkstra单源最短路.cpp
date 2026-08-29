@@ -19,6 +19,36 @@ using namespace std;
 class Tmp {
 
 private:
+
+    // 核心代码如下：
+
+    // 此处使用了反向索引堆优化
+    // 普通Djk,维护小根堆
+    // 每次需要判断未出过队且dist[v]大于dist[u]+weight
+    // 若满足,则更新dist[v]并入队
+    // 出队时标记
+    void Djk(int s) {
+        HeapInsert(0, s);
+        dist[s] = 0;
+        vis[s] = true;
+        while (siz > 0) {
+            pop();
+            //弹出,意味着找到该点的最优解
+            dist[heapPoint] = heapVal;
+            vis[heapPoint] = true;
+            for (int edge = head[heapPoint];edge > 0;edge = nxt[edge]) {
+                int son = to[edge];
+                ll val = weight[edge];
+                //已弹出不受理
+                if (vis[son]) {
+                    continue;
+                }
+                //HeapInsert函数自带增添、更新选择
+                HeapInsert(heapVal + val, son);
+            }
+        }
+    }
+
     using ll = long long;
     static const int MAXN = 1e5;
     static const int MAXM = 2e5;
@@ -118,27 +148,7 @@ private:
         }
     }
 
-    void Djk(int s) {
-        HeapInsert(0, s);
-        dist[s] = 0;
-        vis[s] = true;
-        while (siz > 0) {
-            pop();
-            //弹出,意味着找到该点的最优解
-            dist[heapPoint] = heapVal;
-            vis[heapPoint] = true;
-            for (int edge = head[heapPoint];edge > 0;edge = nxt[edge]) {
-                int son = to[edge];
-                ll val = weight[edge];
-                //已弹出不受理
-                if (vis[son]) {
-                    continue;
-                }
-                //HeapInsert函数自带增添、更新选择
-                HeapInsert(heapVal + val, son);
-            }
-        }
-    }
+
 public:
     //模板例题：https://www.luogu.com.cn/problem/P4779
     void solve() {
