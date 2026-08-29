@@ -35,6 +35,7 @@ private:
             pop();
             //弹出,意味着找到该点的最优解
             dist[heapPoint] = heapVal;
+            if(vis[heapPoint])continue;
             vis[heapPoint] = true;
             for (int edge = head[heapPoint];edge > 0;edge = nxt[edge]) {
                 int son = to[edge];
