@@ -50,20 +50,26 @@ ll exgcd(ll a, ll b, ll& x, ll& y) {
 // 模板：https://www.luogu.com.cn/problem/P4777
 // C++建议使用__int128_t类型, 比位运算实现更为安全和高效
 ll excrt(int n) {
-    ll tail = 0, lcm = 1, tmp, b, c, x0;
+    ll tail = 0, lcm = 1, tmp, a, b, c, x0;
     for (int i = 1;i <= n;i++) {
+        // 此处a, b, c可能因题意而定制
+        a = lcm;
         b = m[i];
         c = ((r[i] - tail) % b + b) % b;
+
+        // 以下代码是通用部分
         ll x, y;
-        ll d = exgcd(lcm, b, x, y);
+        ll d = exgcd(a, b, x, y);
         if (c % d != 0) {
             return -1;//无解
         }
+
         // x0保证非负特解
         x0 = ((ill)x * (ill)(c / d) % (b / d) + ill(b / d)) % (b / d);
-        tmp = lcm * (b / d);
+        tmp = lcm * (b / d);// 此时的tmp就是新的lcm1
         tail = ((ill)tail + ill(x0) * ill(lcm) % tmp) % tmp;
         lcm = tmp;
     }
+    // tail是返回最小非负解
     return tail;
 }
