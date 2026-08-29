@@ -11,8 +11,10 @@ using ill = __int128_t;
 // 对于mi, ri, 得到ans2 = y * mi + ri
 // 显然ans1 = ans2, 相消得到lcm* x + mi * y = ri - tail, 即ax + by = c
 // exgcd求解, 若不存在解说明无解
-// 通解x = x0 + (b / d) * n, 带入ans = lcm * x + tail
-// ans = lcm * (b / d) * n + (lcm * x0 + tail)
+
+
+// 通解x = x0 + (b / d) * n, 带入ans = lcm * x + tail, ans = lcm * (b / d) * n + (lcm * x0 + tail)
+// 即进行如下运算：
 // 得到lcm1 = lcm * (b / d), tail1 = (lcm * x0 + tail) % lcm1
 // 得到ans = lcm1 * x + tail1
 // 持续迭代直到结束, 得到最后的tail就是答案(最小整数解)
