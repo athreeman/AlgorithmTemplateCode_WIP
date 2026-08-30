@@ -9,7 +9,7 @@ using ll = long long;
 // 使用特定数值的余数分组
 // 注意：按照余数分组[0, x - 1], 所以是以0为基准而非1
 // 根据题目不同可能需要对背包容量进行定制, 例如n = n - 1
-
+// 最终计算的dist[i]即 % base = i可达到的最低值
 
 const int MAXN = 1e5;
 const ll INF = LLONG_MAX;
