@@ -23,6 +23,9 @@ using ll = long long;
 // 命中了第四个反演式
 // f(k) = (-1)^(i - k) * C(i, k) * g(i) 求和(k <= i <= n)
 
+// https://www.luogu.com.cn/problem/P10596
+// 核心：该题运用了钦定至少k个 -> 恰好k个的转化
+// 此类转化往往是二项式反演的核心
 
 const int mod = 1e9 + 7;
 const int MAXN = 1e6;
