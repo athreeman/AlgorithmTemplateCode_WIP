@@ -58,5 +58,5 @@ void solve() {
         add(i, n, 1);
         cin >> p[i];
     }
-    cout << ::rank(n) + 1;
+    cout << (::rank(n) + 1) % mod;
 }
