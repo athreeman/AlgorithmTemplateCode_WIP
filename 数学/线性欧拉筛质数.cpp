@@ -10,7 +10,10 @@ void getPrimes_Linear(ll n) {
     isPrime[0] = isPrime[1] = 0;
     Primes[0] = 0;
     for (ll i = 2;i <= n;i++) {
-        if (isPrime[i]) Primes[++Primes[0]] = i;
+        if (isPrime[i]) {
+            minFactor[i] = i;// 质数的最小质因子是他本身
+            Primes[++Primes[0]] = i;
+        }
         for (ll j = 1, v;j <= Primes[0];j++) {
             v = Primes[j];
             if (v * i > n)break;
