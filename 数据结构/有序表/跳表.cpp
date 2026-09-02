@@ -11,6 +11,8 @@ const ll INF = 1e18;
 // 从而实现高层到底层的个数排列拟合于完全二叉树
 // 实现logn的时间复杂度
 
+// https://www.luogu.com.cn/problem/P3369
+
 random_device rd;
 mt19937 gen(rd());
 uniform_int_distribution<int>dist(1, 100);
@@ -189,7 +191,7 @@ int rank(ll val) {// 查询排名
     return small(1, UpLimit, val) + 1;
 }
 
-int index(int i, int h, int x) {
+ll index(int i, int h, int x) {
     int c = 0;
     while (node[i].next[h] != 0 && c + node[i].len[h] < x) {
         c += node[i].len[h];
@@ -203,11 +205,11 @@ int index(int i, int h, int x) {
     }
 }
 
-int index(int x) {
+ll index(int x) {
     return index(1, UpLimit, x);
 }
 
-int pre(int i, int h, ll val) {
+ll pre(int i, int h, ll val) {
     while (node[i].next[h] != 0 && node[node[i].next[h]].key < val) {
         i = node[i].next[h];
     }
@@ -219,11 +221,11 @@ int pre(int i, int h, ll val) {
     }
 }
 
-int pre(ll val) {
+ll pre(ll val) {
     return pre(1, UpLimit, val);
 }
 
-int suf(int i, int h, ll val) {
+ll suf(int i, int h, ll val) {
     while (node[i].next[h] != 0 && node[node[i].next[h]].key < val) {
         i = node[i].next[h];
     }
@@ -247,6 +249,6 @@ int suf(int i, int h, ll val) {
     }
 }
 
-int suf(ll val) {
+ll suf(ll val) {
     return suf(1, UpLimit, val);
 }
