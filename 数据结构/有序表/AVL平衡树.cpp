@@ -84,7 +84,7 @@ int maintain(int i) {
     }
     else if (rh - lh > 1) {
         // RR
-        if (node[node[r].right].height >= node[node[r].left].right) {
+        if (node[node[r].right].height >= node[node[r].left].height) {
             i = leftRotate(i);
         }
         else {
