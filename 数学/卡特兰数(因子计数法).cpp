@@ -10,9 +10,11 @@ using ll = long long;
 // 需要用到公式2 + 因子计数法求解
 // 维护最小质因子表, 质数不需要维护(默认标记0, 否则会出错！)
 
-// 时间复杂度：O(n)
-
+// 时间复杂度:O(n)
+// https://www.luogu.com.cn/problem/P3200
 // 核心代码如下：
+
+
 ll f2(int n, int mod) {
     // 2 ~ n : -1
     fill(cnt + 2, cnt + n + 1, -1);
