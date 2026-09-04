@@ -23,7 +23,7 @@ uniform_int_distribution<int>dist(1, INT_MAX);
 
 void clear() {
     for (int i = 0;i <= cnt;i++) {
-        node[i] = { 0,0,0,0,0 };
+        node[i] = { 0,0,0,0,0,0 };
     }
     head = cnt = 0;
 }
@@ -54,6 +54,8 @@ void splitByKey(int l, int r, int i, ll key) {
 }
 
 // 排名分裂
+// 该排名分裂, 只能解决每个位置的count = 1的情况
+// 若存在重复计数, 需要定制
 void splitByRank(int l, int r, int i, ll rk) {
     if (i == 0) {
         node[l].right = node[r].left = 0;
