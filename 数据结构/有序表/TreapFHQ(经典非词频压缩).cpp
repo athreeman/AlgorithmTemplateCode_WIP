@@ -9,6 +9,9 @@ using ll = long long;
 // 因此,FHQ树可以巧妙地维护中序遍历的特定顺序
 // 同时又因为优先级的设定, 使得树高也得到维护
 
+// 如若只在乎特定的顺序, merge和split的结合更为灵活, 此时所谓的排名rank就是中序遍历顺序
+// 如若在乎key值的大小关系, 那么merge操作对于split分裂后的左右子树, 顺序不能改变, 否则rank失去了关于元素大小的比较功能, 只能代表遍历顺序
+
 const int MAXN = 2e5;
 const ll INF = 1e18;
 int head = 0, cnt = 0;
