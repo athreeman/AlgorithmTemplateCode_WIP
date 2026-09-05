@@ -5,6 +5,10 @@ using ll = long long;
 // FHQTreap
 // 核心: 根据key值执行分裂, 根据优先级执行合并操作
 
+// merge(l,r)：合并后树的中序遍历顺序就是先l树,再r树
+// 因此,FHQ树可以巧妙地维护中序遍历的特定顺序
+// 同时又因为优先级的设定, 使得树高也得到维护
+
 const int MAXN = 2e5;
 const ll INF = 1e18;
 int head = 0, cnt = 0;
