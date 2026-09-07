@@ -15,7 +15,7 @@ struct tree {
     ll val;
     int left, right;
     int dist;
-    int father;
+    int father;// 辅助进行remove删除操作
 }node[MAXN + 1];
 
 int fa[MAXN + 1];
@@ -56,9 +56,10 @@ int merge(int i, int j) {
 int pop(int i) {
     fa[node[i].left] = node[i].left;
     fa[node[i].right] = node[i].right;
-    fa[i] = merge(node[i].left, node[i].right);
+    int newHead = merge(node[i].left, node[i].right);
+    fa[i] = newHead;
     node[i].left = node[i].right = node[i].dist = node[i].father = 0;
-    return fa[i];
+    return newHead;
 }
 
 int remove(int i) {
@@ -66,6 +67,7 @@ int remove(int i) {
     int f = node[i].father;
     int s = pop(i);
     node[s].father = f;
+
     if (head != i) {
         fa[s] = head;
         if (node[f].left == i) {
@@ -81,6 +83,8 @@ int remove(int i) {
             }
         }
     }
+    // 若i就是head, 则 = 0, fa[s] = 0
+    // 若i不是head, 则s存在, 更新
     return fa[s];
 }
 
