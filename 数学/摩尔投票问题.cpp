@@ -2,6 +2,9 @@
 using namespace std;
 const int MAXN = 2e5;
 int a[MAXN + 1];
+
+// 摩尔投票问题：求解词频严格大于n/2的元素(n/2向下取整)
+
 bool check(int n, int x) {
     for (int i = 1, j = 0;i <= n;i++) {
         j += (a[i] == x);
